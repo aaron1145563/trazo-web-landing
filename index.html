@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trazo Web Studio — Tu sitio web profesional en renta mensual</title>
+  <meta name="description" content="Sitios web profesionales para negocios locales. Sin inversión grande, sin complicaciones técnicas. Desde $350 MXN/mes con hosting y mantenimiento incluido.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#1F4E79',
+            'brand-light': '#85B7EB',
+            'brand-bg': '#F7F6F3',
+            'brand-dark': '#1A1A18',
+            'brand-gray': '#888780',
+            'brand-warm': '#E3E1D9',
+          },
+          fontFamily: {
+            serif: ['DM Serif Display', 'Georgia', 'serif'],
+            sans: ['Inter', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .whatsapp-float {
+      animation: pulse-shadow 2s infinite;
+    }
+    @keyframes pulse-shadow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); }
+      50% { box-shadow: 0 0 0 12px rgba(37,211,102,0); }
+    }
+  </style>
+</head>
+<body class="bg-white font-sans text-brand-dark antialiased">
+
+  <!-- NAV -->
+  <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm border-b border-brand-warm z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg width="36" height="36" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
+          <path d="M20 15 L 70 15" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="75" cy="65" r="4.5" fill="#1F4E79"/>
+        </svg>
+        <div class="leading-tight">
+          <span class="font-serif text-brand text-lg">Trazo</span>
+          <span class="block text-[9px] tracking-[3px] text-brand-gray uppercase -mt-1">Web Studio</span>
+        </div>
+      </div>
+      <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
+         class="bg-brand text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-brand/90 transition hidden sm:inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Escr&iacute;benos
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="pt-28 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand leading-tight">
+        Tu sitio web profesional,<br class="hidden sm:block"> sin inversi&oacute;n grande de entrada
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl text-brand-dark/70 max-w-2xl mx-auto leading-relaxed">
+        Nosotros lo dise&ntilde;amos, lo publicamos y lo mantenemos cada mes. T&uacute; solo pagas una mensualidad fija y te olvidas de lo t&eacute;cnico.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
+           class="bg-brand text-white font-semibold px-8 py-4 rounded-xl text-lg hover:bg-brand/90 transition inline-flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+          Quiero mi sitio web
+        </a>
+        <a href="#paquetes" class="border-2 border-brand text-brand font-semibold px-8 py-4 rounded-xl text-lg hover:bg-brand/5 transition text-center">
+          Ver paquetes
+        </a>
+      </div>
+      <p class="mt-6 text-sm text-brand-gray">Desde $350 MXN/mes &middot; Sin contratos anuales &middot; Cancela cuando quieras</p>
+    </div>
+  </section>
+
+  <!-- PROBLEMA -->
+  <section class="py-16 sm:py-24 bg-brand-bg px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
+        &iquest;Te suena familiar?
+      </h2>
+      <div class="mt-12 grid sm:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <p class="text-lg text-brand-dark/80 italic">&ldquo;No tengo p&aacute;gina, solo mi Instagram.&rdquo;</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <p class="text-lg text-brand-dark/80 italic">&ldquo;Me da pena cuando me piden mi p&aacute;gina y no tengo.&rdquo;</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <p class="text-lg text-brand-dark/80 italic">&ldquo;Lo intent&eacute; en Wix pero lo dej&eacute; a medias.&rdquo;</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <p class="text-lg text-brand-dark/80 italic">&ldquo;Ya me clavaron una vez con esto, no quiero que me pase otra vez.&rdquo;</p>
+        </div>
+      </div>
+      <p class="mt-10 text-center text-lg text-brand-dark/70 max-w-2xl mx-auto">
+        Si tu competencia se ve m&aacute;s seria en l&iacute;nea que t&uacute;, est&aacute;s perdiendo clientes sin darte cuenta. Un sitio web profesional no es un lujo &mdash; es lo m&iacute;nimo para que te tomen en serio.
+      </p>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="py-16 sm:py-24 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
+        As&iacute; de f&aacute;cil funciona
+      </h2>
+      <p class="mt-4 text-center text-brand-dark/60 text-lg">Sin que tengas que aprender nada t&eacute;cnico</p>
+      <div class="mt-12 grid sm:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
+            <span class="text-brand font-bold text-xl">1</span>
+          </div>
+          <h3 class="mt-4 font-semibold text-brand-dark">Plat&iacute;canos tu negocio</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Nos cuentas qu&eacute; haces, a qui&eacute;n le vendes y qu&eacute; quieres mostrar.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
+            <span class="text-brand font-bold text-xl">2</span>
+          </div>
+          <h3 class="mt-4 font-semibold text-brand-dark">Nosotros dise&ntilde;amos</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Creamos tu sitio con tu marca, tus colores y tu contenido.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
+            <span class="text-brand font-bold text-xl">3</span>
+          </div>
+          <h3 class="mt-4 font-semibold text-brand-dark">T&uacute; lo revisas</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Te mostramos el resultado y hacemos los ajustes que pidas.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
+            <span class="text-brand font-bold text-xl">4</span>
+          </div>
+          <h3 class="mt-4 font-semibold text-brand-dark">Listo, en l&iacute;nea</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Tu sitio se publica y nosotros lo mantenemos cada mes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUE INCLUYE -->
+  <section class="py-16 sm:py-24 bg-brand-bg px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
+        Todo esto incluye tu renta mensual
+      </h2>
+      <p class="mt-4 text-center text-brand-dark/60 text-lg">T&uacute; no te preocupas de nada, nosotros nos encargamos</p>
+      <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <div class="text-brand text-2xl mb-3">&#9998;</div>
+          <h3 class="font-semibold text-brand-dark">Dise&ntilde;o profesional</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Adaptado a tu marca, no una plantilla gen&eacute;rica que se ve igual a miles de sitios.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <div class="text-brand text-2xl mb-3">&#128274;</div>
+          <h3 class="font-semibold text-brand-dark">Hosting y seguridad</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">El lugar donde vive tu p&aacute;gina, con el candadito de seguridad incluido.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <div class="text-brand text-2xl mb-3">&#128260;</div>
+          <h3 class="font-semibold text-brand-dark">Cambios de contenido</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Necesitas actualizar precios, fotos o textos? Nos escribes y listo.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <div class="text-brand text-2xl mb-3">&#128241;</div>
+          <h3 class="font-semibold text-brand-dark">Se ve bien en celular</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Tu sitio se adapta a cualquier pantalla: celular, tablet o computadora.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <div class="text-brand text-2xl mb-3">&#128172;</div>
+          <h3 class="font-semibold text-brand-dark">Soporte por WhatsApp</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Hablas con una persona real, no con un formulario o un call center.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <div class="text-brand text-2xl mb-3">&#128190;</div>
+          <h3 class="font-semibold text-brand-dark">Respaldos mensuales</h3>
+          <p class="mt-2 text-sm text-brand-dark/60">Tu informaci&oacute;n siempre protegida con copias de seguridad.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAQUETES -->
+  <section id="paquetes" class="py-16 sm:py-24 px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
+        Elige tu paquete
+      </h2>
+      <p class="mt-4 text-center text-brand-dark/60 text-lg">Empieza con poco, crece cuando quieras</p>
+      <div class="mt-12 grid lg:grid-cols-3 gap-6">
+
+        <!-- BASICO -->
+        <div class="rounded-2xl border border-brand-warm p-8 flex flex-col">
+          <h3 class="font-semibold text-lg text-brand-dark">B&aacute;sico</h3>
+          <p class="text-sm text-brand-dark/60 mt-1">Para empezar con lo esencial</p>
+          <div class="mt-6">
+            <span class="text-4xl font-bold text-brand">$350</span>
+            <span class="text-brand-dark/60"> MXN/mes</span>
+          </div>
+          <p class="text-sm text-brand-dark/50 mt-1">Setup inicial: $800 MXN (pago &uacute;nico)</p>
+          <ul class="mt-6 space-y-3 flex-1">
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Hasta 3 p&aacute;ginas
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Plantilla personalizada a tu marca
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              2 cambios de contenido al mes
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Formulario de contacto
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Listo en 3-5 d&iacute;as
+            </li>
+          </ul>
+          <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20el%20paquete%20B%C3%A1sico"
+             class="mt-8 block text-center border-2 border-brand text-brand font-semibold py-3 rounded-xl hover:bg-brand/5 transition">
+            Quiero este paquete
+          </a>
+        </div>
+
+        <!-- PROFESIONAL -->
+        <div class="rounded-2xl border-2 border-brand p-8 flex flex-col relative bg-brand/[0.02]">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-semibold px-4 py-1 rounded-full">
+            M&aacute;s popular
+          </div>
+          <h3 class="font-semibold text-lg text-brand-dark">Profesional</h3>
+          <p class="text-sm text-brand-dark/60 mt-1">Para negocios que quieren verse en serio</p>
+          <div class="mt-6">
+            <span class="text-4xl font-bold text-brand">$600</span>
+            <span class="text-brand-dark/60"> MXN/mes</span>
+          </div>
+          <p class="text-sm text-brand-dark/50 mt-1">Setup inicial: $1,500 MXN (pago &uacute;nico)</p>
+          <ul class="mt-6 space-y-3 flex-1">
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Hasta 6 p&aacute;ginas
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Plantilla + ajustes a medida
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              4 cambios de contenido al mes
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              SEO b&aacute;sico incluido
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Cat&aacute;logo simple de productos
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Listo en 7-10 d&iacute;as
+            </li>
+          </ul>
+          <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20el%20paquete%20Profesional"
+             class="mt-8 block text-center bg-brand text-white font-semibold py-3 rounded-xl hover:bg-brand/90 transition">
+            Quiero este paquete
+          </a>
+        </div>
+
+        <!-- PREMIUM -->
+        <div class="rounded-2xl border border-brand-warm p-8 flex flex-col">
+          <h3 class="font-semibold text-lg text-brand-dark">Premium</h3>
+          <p class="text-sm text-brand-dark/60 mt-1">Para quienes quieren lo mejor</p>
+          <div class="mt-6">
+            <span class="text-4xl font-bold text-brand">$950</span>
+            <span class="text-brand-dark/60"> MXN/mes</span>
+          </div>
+          <p class="text-sm text-brand-dark/50 mt-1">Setup inicial: $2,500 MXN (pago &uacute;nico)</p>
+          <ul class="mt-6 space-y-3 flex-1">
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Hasta 10 p&aacute;ginas
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Dise&ntilde;o completamente a medida
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Cambios ilimitados (menores)
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              SEO + reporte mensual
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Cat&aacute;logo + carrito de compras
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Integraci&oacute;n directa con WhatsApp
+            </li>
+            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
+              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Listo en 10-15 d&iacute;as
+            </li>
+          </ul>
+          <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20el%20paquete%20Premium"
+             class="mt-8 block text-center border-2 border-brand text-brand font-semibold py-3 rounded-xl hover:bg-brand/5 transition">
+            Quiero este paquete
+          </a>
+        </div>
+
+      </div>
+      <p class="mt-8 text-center text-sm text-brand-dark/50">
+        Todos los paquetes incluyen hosting, seguridad, respaldos y soporte por WhatsApp. No incluyen dominio (~$300 MXN/a&ntilde;o, registrado a tu nombre).
+      </p>
+    </div>
+  </section>
+
+  <!-- REGLAS CLARAS -->
+  <section class="py-16 sm:py-24 bg-brand-bg px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
+        Reglas claras desde el d&iacute;a uno
+      </h2>
+      <p class="mt-4 text-center text-brand-dark/60 text-lg">Todo por escrito, para tu tranquilidad</p>
+      <div class="mt-12 space-y-6">
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <h3 class="font-semibold text-brand-dark">&iquest;Qu&eacute; pasa si dejo de pagar?</h3>
+          <p class="mt-2 text-brand-dark/70">El sitio se pausa hasta que regularices. No pierdes tu contenido ni tu dise&ntilde;o. Todo queda explicado desde el primer d&iacute;a, sin sorpresas.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <h3 class="font-semibold text-brand-dark">&iquest;Puedo cancelar cuando quiera?</h3>
+          <p class="mt-2 text-brand-dark/70">S&iacute;. Con 15 d&iacute;as de aviso, sin penalizaci&oacute;n. No te pedimos compromiso de un a&ntilde;o ni te atamos con letra chiquita.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <h3 class="font-semibold text-brand-dark">&iquest;Puedo ser due&ntilde;o del sitio?</h3>
+          <p class="mt-2 text-brand-dark/70">Claro. En cualquier momento puedes ejercer la opci&oacute;n de compra (desde $6,000 MXN) y el sitio pasa a ser completamente tuyo.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-brand-warm">
+          <h3 class="font-semibold text-brand-dark">&iquest;C&oacute;mo s&eacute; que no van a desaparecer?</h3>
+          <p class="mt-2 text-brand-dark/70">Firmamos contrato por escrito desde el primer d&iacute;a. Ah&iacute; quedan las reglas claras de qu&eacute; pasa si algo no funciona, de tu lado o del nuestro.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARA QUIEN -->
+  <section class="py-16 sm:py-24 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="font-serif text-3xl sm:text-4xl text-brand">
+        Hecho para negocios como el tuyo
+      </h2>
+      <div class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#127860;</div>
+          <p class="text-sm font-medium text-brand-dark">Restaurantes y cafeter&iacute;as</p>
+        </div>
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#128135;</div>
+          <p class="text-sm font-medium text-brand-dark">Salones de belleza</p>
+        </div>
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#129658;</div>
+          <p class="text-sm font-medium text-brand-dark">Consultorios y cl&iacute;nicas</p>
+        </div>
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#128188;</div>
+          <p class="text-sm font-medium text-brand-dark">Abogados y contadores</p>
+        </div>
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#128295;</div>
+          <p class="text-sm font-medium text-brand-dark">Talleres y servicios</p>
+        </div>
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#127891;</div>
+          <p class="text-sm font-medium text-brand-dark">Coaches y consultores</p>
+        </div>
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#128722;</div>
+          <p class="text-sm font-medium text-brand-dark">Tiendas locales</p>
+        </div>
+        <div class="bg-brand-bg rounded-xl p-5">
+          <div class="text-3xl mb-2">&#127968;</div>
+          <p class="text-sm font-medium text-brand-dark">Negocios de barrio</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="py-16 sm:py-24 bg-brand px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="font-serif text-3xl sm:text-4xl text-white">
+        Para que ya no te d&eacute; pena tu p&aacute;gina
+      </h2>
+      <p class="mt-6 text-lg text-white/80 max-w-xl mx-auto">
+        Escr&iacute;benos por WhatsApp, cu&eacute;ntanos de tu negocio y te decimos c&oacute;mo se ver&iacute;a tu sitio. Sin compromiso, sin presi&oacute;n.
+      </p>
+      <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
+         class="mt-10 inline-flex items-center gap-2 bg-white text-brand font-bold px-10 py-4 rounded-xl text-lg hover:bg-white/95 transition">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Quiero mi sitio web
+      </a>
+      <p class="mt-4 text-sm text-white/60">Respondemos en menos de 24 horas</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-10 px-4 sm:px-6 border-t border-brand-warm">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <svg width="28" height="28" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
+          <path d="M20 15 L 70 15" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="75" cy="65" r="4.5" fill="#1F4E79"/>
+        </svg>
+        <span class="font-serif text-brand">Trazo</span>
+        <span class="text-[8px] tracking-[2px] text-brand-gray uppercase">Web Studio</span>
+      </div>
+      <p class="text-sm text-brand-gray">&copy; 2026 Trazo Web Studio. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOTANTE -->
+  <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
+     class="whatsapp-float fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition z-50"
+     aria-label="Contactar por WhatsApp">
+    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+  </a>
+
+</body>
+</html>
