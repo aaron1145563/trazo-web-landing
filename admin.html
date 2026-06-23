@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cuentas · Trazo Web Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--brand:#1F4E79;--brand-d:#163a5c;--ink:#202229;--gray:#6b7078;--line:#e8e8ea;--soft:#F7F6F3;--green:#25D366;--red:#e74c3c;--yellow:#f0a818;--blue:#1a73e8}
+body{font-family:'Inter',sans-serif;background:var(--soft);color:var(--ink)}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+nav{background:var(--brand);color:#fff;position:sticky;top:0;z-index:50}
+.nav-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.nav-in b{font-size:16px;font-weight:700}
+.nav-out{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;display:none}
+.nav-out:hover{background:rgba(255,255,255,.1)}
+
+/* GATE */
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.gate-box{background:#fff;border-radius:16px;padding:40px 32px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.gate-box h2{font-size:20px;margin-bottom:6px}
+.gate-box p{font-size:13px;color:var(--gray);margin-bottom:24px}
+.gate-box input{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:14px;font-size:22px;outline:none;text-align:center;letter-spacing:8px;margin-bottom:14px}
+.gate-box input:focus{border-color:var(--brand)}
+.gate-go{width:100%;background:var(--brand);color:#fff;border:none;font-size:14px;font-weight:700;padding:14px;border-radius:9px}
+.gate-go:hover{background:var(--brand-d)}
+.gate-err{color:var(--red);font-size:12px;margin-top:10px;display:none}
+
+/* MAIN */
+.wrap{max-width:1100px;margin:0 auto;padding:20px;display:none}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.stat{background:#fff;border-radius:12px;padding:22px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.stat b{font-size:28px;font-weight:800;display:block}
+.stat span{font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;font-weight:600}
+.stat.green b{color:#2e9e5b}
+.stat.yellow b{color:var(--yellow)}
+.stat.red b{color:var(--red)}
+.stat.blue b{color:var(--blue)}
+
+/* TABS */
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--line)}
+.tab-btn{background:none;border:none;padding:12px 22px;font-size:13px;font-weight:600;cursor:pointer;color:var(--gray);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab-btn.on{color:var(--brand);border-bottom-color:var(--brand);font-weight:700}
+
+/* FORM */
+.form-card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:20px}
+.form-card h3{font-size:15px;font-weight:700;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.field label{font-size:12px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand)}
+.field textarea{resize:vertical;min-height:60px}
+.form-actions{display:flex;gap:10px;margin-top:16px}
+.btn-pri{background:var(--brand);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:13px;font-weight:700}
+.btn-pri:hover{background:var(--brand-d)}
+.btn-sec{background:#fff;color:var(--brand);border:2px solid var(--brand);padding:12px 24px;border-radius:8px;font-size:13px;font-weight:700}
+
+/* TABLE */
+.table-wrap{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--soft);text-align:left;padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);position:sticky;top:0}
+td{padding:12px 16px;border-top:1px solid var(--line)}
+tr:hover td{background:#fafaf8}
+.badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:12px}
+.badge.pagado{background:#dcf5e5;color:#1c7a43}
+.badge.pendiente{background:#fff3d6;color:#9a6c00}
+.badge.vencido{background:#fde8e8;color:var(--red)}
+.badge.activo{background:#dcebff;color:#1a4f9e}
+.badge.cancelado{background:#f0f0f2;color:var(--gray)}
+.row-acts{display:flex;gap:6px}
+.row-btn{width:32px;height:32px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.row-btn.wa{background:var(--green)}
+.row-btn.del{background:var(--red)}
+.row-btn svg{width:14px;height:14px;fill:#fff}
+.empty{padding:50px;text-align:center;color:var(--gray);font-size:14px}
+
+/* FILTERS */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.filters input{flex:1;min-width:200px;border:1.5px solid var(--line);border-radius:9px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;background:#fff}
+.filters input:focus{border-color:var(--brand)}
+.filters select{border:1.5px solid var(--line);border-radius:9px;padding:11px 14px;font-size:13px;font-family:inherit;outline:none;background:#fff;font-weight:600}
+
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  th,td{padding:10px 12px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <b>Trazo Web · Cuentas</b>
+    <button class="nav-out" onclick="logout()">Salir</button>
+  </div>
+</nav>
+
+<!-- LOGIN -->
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <h2>Panel de Cuentas</h2>
+    <p>Ingresa tu PIN para continuar</p>
+    <input type="password" id="pin" maxlength="6" placeholder="······" onkeydown="if(event.key==='Enter')login()"/>
+    <button class="gate-go" onclick="login()">Entrar</button>
+    <div class="gate-err" id="pinErr">PIN incorrecto</div>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div class="wrap" id="panel">
+
+  <!-- STATS -->
+  <div class="stats" id="stats"></div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn on" onclick="switchTab('clientes',this)">Clientes</button>
+    <button class="tab-btn" onclick="switchTab('cobros',this)">Cobros</button>
+    <button class="tab-btn" onclick="switchTab('registrar',this)">+ Registrar</button>
+  </div>
+
+  <!-- TAB: CLIENTES -->
+  <div id="tab-clientes">
+    <div class="filters">
+      <input type="text" placeholder="Buscar cliente..." oninput="filterClients(this.value)"/>
+      <select onchange="filterStatus(this.value)">
+        <option value="">Todos</option>
+        <option value="activo">Activos</option>
+        <option value="pendiente">Pendientes</option>
+        <option value="cancelado">Cancelados</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Negocio</th>
+            <th>Paquete</th>
+            <th>Renta/mes</th>
+            <th>Estado</th>
+            <th>Inicio</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="clientsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: COBROS -->
+  <div id="tab-cobros" style="display:none">
+    <div class="filters">
+      <input type="text" placeholder="Buscar cobro..." oninput="filterPayments(this.value)"/>
+      <select onchange="filterPaymentStatus(this.value)">
+        <option value="">Todos</option>
+        <option value="pagado">Pagados</option>
+        <option value="pendiente">Pendientes</option>
+        <option value="vencido">Vencidos</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Concepto</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Fecha l&iacute;mite</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="paymentsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: REGISTRAR -->
+  <div id="tab-registrar" style="display:none">
+
+    <div class="form-card">
+      <h3>Nuevo Cliente</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>Nombre del cliente</label>
+          <input type="text" id="fName" placeholder="Ej. Mar&iacute;a L&oacute;pez"/>
+        </div>
+        <div class="field">
+          <label>Nombre del negocio</label>
+          <input type="text" id="fBiz" placeholder="Ej. Sal&oacute;n Bella"/>
+        </div>
+        <div class="field">
+          <label>WhatsApp</label>
+          <input type="tel" id="fPhone" placeholder="5512345678"/>
+        </div>
+        <div class="field">
+          <label>Paquete</label>
+          <select id="fPlan">
+            <option value="basico">B&aacute;sico — $350/mes</option>
+            <option value="profesional">Profesional — $600/mes</option>
+            <option value="premium">Premium — $950/mes</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Setup cobrado</label>
+          <input type="number" id="fSetup" placeholder="800"/>
+        </div>
+        <div class="field">
+          <label>Fecha de inicio</label>
+          <input type="date" id="fDate"/>
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Notas</label>
+        <textarea id="fNotes" placeholder="Observaciones del cliente..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn-pri" onclick="addClient()">Guardar cliente</button>
+        <button class="btn-sec" onclick="clearForm()">Limpiar</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>Registrar Cobro</h3>
+      <div class="form-grid">
+        <div class="field">
+          <label>Cliente</label>
+          <select id="fPayClient"></select>
+        </div>
+        <div class="field">
+          <label>Concepto</label>
+          <select id="fConcept">
+            <option value="setup">Setup inicial</option>
+            <option value="renta">Renta mensual</option>
+            <option value="extra">Servicio extra</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Monto (MXN)</label>
+          <input type="number" id="fAmount" placeholder="350"/>
+        </div>
+        <div class="field">
+          <label>Estado</label>
+          <select id="fPayStatus">
+            <option value="pendiente">Pendiente</option>
+            <option value="pagado">Pagado</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Fecha l&iacute;mite</label>
+          <input type="date" id="fDue"/>
+        </div>
+      </div>
+      <div class="form-actions" style="margin-top:16px">
+        <button class="btn-pri" onclick="addPayment()">Registrar cobro</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PIN_HASH = '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92';
+let clients = JSON.parse(localStorage.getItem('tw_clients')||'[]');
+let payments = JSON.parse(localStorage.getItem('tw_payments')||'[]');
+
+async function sha256(msg){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function login(){
+  const pin = document.getElementById('pin').value;
+  const hash = await sha256(pin);
+  if(hash === PIN_HASH){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('panel').style.display='block';
+    document.querySelector('.nav-out').style.display='block';
+    render();
+  } else {
+    document.getElementById('pinErr').style.display='block';
+    document.getElementById('pin').value='';
+  }
+}
+
+function logout(){
+  document.getElementById('gate').style.display='flex';
+  document.getElementById('panel').style.display='none';
+  document.querySelector('.nav-out').style.display='none';
+  document.getElementById('pin').value='';
+  document.getElementById('pinErr').style.display='none';
+}
+
+function save(){
+  localStorage.setItem('tw_clients', JSON.stringify(clients));
+  localStorage.setItem('tw_payments', JSON.stringify(payments));
+}
+
+function switchTab(tab, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  ['clientes','cobros','registrar'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display = t===tab?'block':'none';
+  });
+  if(tab==='registrar') updatePayClientSelect();
+}
+
+function render(){
+  renderStats();
+  renderClients(clients);
+  renderPayments(payments);
+  updatePayClientSelect();
+}
+
+function renderStats(){
+  const active = clients.filter(c=>c.status==='activo').length;
+  const pending = payments.filter(p=>p.status==='pendiente').length;
+  const overdue = payments.filter(p=>p.status==='vencido'||(p.status==='pendiente'&&new Date(p.due)<new Date())).length;
+  const totalPaid = payments.filter(p=>p.status==='pagado').reduce((s,p)=>s+p.amount,0);
+  const monthlyRev = clients.filter(c=>c.status==='activo').reduce((s,c)=>{
+    const plans={basico:350,profesional:600,premium:950};
+    return s+(plans[c.plan]||0);
+  },0);
+
+  document.getElementById('stats').innerHTML=`
+    <div class="stat blue"><b>${active}</b><span>Clientes activos</span></div>
+    <div class="stat green"><b>$${totalPaid.toLocaleString()}</b><span>Cobrado total</span></div>
+    <div class="stat green"><b>$${monthlyRev.toLocaleString()}</b><span>Ingreso mensual</span></div>
+    <div class="stat yellow"><b>${pending}</b><span>Cobros pendientes</span></div>
+    <div class="stat red"><b>${overdue}</b><span>Vencidos</span></div>
+  `;
+}
+
+function renderClients(list){
+  const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
+  const prices={basico:'$350',profesional:'$600',premium:'$950'};
+  const body = document.getElementById('clientsBody');
+  if(!list.length){ body.innerHTML='<tr><td colspan="7" class="empty">Sin clientes registrados</td></tr>'; return; }
+  body.innerHTML = list.map((c,i)=>`
+    <tr>
+      <td><b>${c.name}</b></td>
+      <td>${c.business}</td>
+      <td>${plans[c.plan]||c.plan}</td>
+      <td>${prices[c.plan]||'—'}</td>
+      <td><span class="badge ${c.status}">${c.status}</span></td>
+      <td>${c.date||'—'}</td>
+      <td>
+        <div class="row-acts">
+          <button class="row-btn wa" title="WhatsApp" onclick="openWA('${c.phone}')">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+          </button>
+          <button class="row-btn del" title="Eliminar" onclick="deleteClient(${i})">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderPayments(list){
+  list.forEach(p=>{
+    if(p.status==='pendiente'&&new Date(p.due)<new Date()) p.status='vencido';
+  });
+  save();
+  const body = document.getElementById('paymentsBody');
+  const concepts={setup:'Setup inicial',renta:'Renta mensual',extra:'Servicio extra'};
+  if(!list.length){ body.innerHTML='<tr><td colspan="6" class="empty">Sin cobros registrados</td></tr>'; return; }
+  body.innerHTML = list.map((p,i)=>`
+    <tr>
+      <td><b>${p.client}</b></td>
+      <td>${concepts[p.concept]||p.concept}</td>
+      <td><b>$${p.amount.toLocaleString()}</b></td>
+      <td><span class="badge ${p.status}">${p.status}</span></td>
+      <td>${p.due||'—'}</td>
+      <td>
+        <div class="row-acts">
+          ${p.status!=='pagado'?`<button class="row-btn" style="background:var(--green)" title="Marcar pagado" onclick="markPaid(${i})">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          </button>`:''}
+          <button class="row-btn del" title="Eliminar" onclick="deletePayment(${i})">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function addClient(){
+  const name=document.getElementById('fName').value.trim();
+  const biz=document.getElementById('fBiz').value.trim();
+  const phone=document.getElementById('fPhone').value.trim();
+  const plan=document.getElementById('fPlan').value;
+  const setup=parseFloat(document.getElementById('fSetup').value)||0;
+  const date=document.getElementById('fDate').value;
+  const notes=document.getElementById('fNotes').value.trim();
+  if(!name||!biz){alert('Nombre y negocio son obligatorios');return;}
+  clients.push({name,business:biz,phone,plan,setup,date,notes,status:'activo'});
+  if(setup>0){
+    payments.push({client:name,concept:'setup',amount:setup,status:'pagado',due:date});
+  }
+  save(); render(); clearForm();
+  switchTab('clientes',document.querySelector('.tab-btn'));
+}
+
+function addPayment(){
+  const client=document.getElementById('fPayClient').value;
+  const concept=document.getElementById('fConcept').value;
+  const amount=parseFloat(document.getElementById('fAmount').value)||0;
+  const status=document.getElementById('fPayStatus').value;
+  const due=document.getElementById('fDue').value;
+  if(!client||!amount){alert('Cliente y monto son obligatorios');return;}
+  payments.push({client,concept,amount,status,due});
+  save(); render();
+  switchTab('cobros',document.querySelectorAll('.tab-btn')[1]);
+}
+
+function deleteClient(i){
+  if(!confirm('¿Eliminar este cliente?'))return;
+  clients.splice(i,1); save(); render();
+}
+function deletePayment(i){
+  if(!confirm('¿Eliminar este cobro?'))return;
+  payments.splice(i,1); save(); render();
+}
+function markPaid(i){
+  payments[i].status='pagado'; save(); render();
+  switchTab('cobros',document.querySelectorAll('.tab-btn')[1]);
+}
+
+function openWA(phone){
+  if(!phone)return;
+  const num = phone.startsWith('52')?phone:'52'+phone;
+  window.open('https://wa.me/'+num,'_blank');
+}
+
+function updatePayClientSelect(){
+  const sel=document.getElementById('fPayClient');
+  sel.innerHTML=clients.map(c=>`<option value="${c.name}">${c.name} — ${c.business}</option>`).join('');
+  if(!clients.length) sel.innerHTML='<option value="">Sin clientes</option>';
+}
+
+function clearForm(){
+  ['fName','fBiz','fPhone','fSetup','fNotes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fDate').value='';
+}
+
+function filterClients(q){
+  q=q.toLowerCase();
+  renderClients(clients.filter(c=>c.name.toLowerCase().includes(q)||c.business.toLowerCase().includes(q)));
+}
+function filterStatus(s){
+  renderClients(s?clients.filter(c=>c.status===s):clients);
+}
+function filterPayments(q){
+  q=q.toLowerCase();
+  renderPayments(payments.filter(p=>p.client.toLowerCase().includes(q)));
+}
+function filterPaymentStatus(s){
+  renderPayments(s?payments.filter(p=>p.status===s):payments);
+}
+</script>
+</body>
+</html>
