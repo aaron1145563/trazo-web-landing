@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Sistema</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--brand:#1F4E79;--brand-d:#163a5c;--ink:#202229;--gray:#6b7078;--line:#e8e8ea;--soft:#F7F6F3;--green:#25D366;--red:#e74c3c;--yellow:#f0a818;--blue:#1a73e8;--purple:#7c3aed}
@@ -230,10 +231,12 @@ tr:hover td{background:#fafaf8}
 </div>
 
 <script>
+const SUPABASE_URL='https://rqjsvehqdbgfzjsoqeto.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxanN2ZWhxZGJnZnpqc29xZXRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNzkzMDMsImV4cCI6MjA5Nzc1NTMwM30.C4S3QuCCo3-X2SSscBBbkL2Y0b9NjlyWE2ErbhZdrRg';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
 const MASTER_HASH='9850256500d74097545e924b265cc2ab02893fa2c8e7ba7f4586db8c3eb93713';
-let clients=JSON.parse(localStorage.getItem('tw_clients')||'[]');
-let payments=JSON.parse(localStorage.getItem('tw_payments')||'[]');
-let orders=JSON.parse(localStorage.getItem('tw_orders')||'[]');
+let clients=[],payments=[],orders=[];
 
 const svgWA='<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>';
 const svgDel='<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
@@ -243,13 +246,26 @@ const svgX='<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5
 
 async function sha256(m){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(m));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 
+async function loadData(){
+  const [o,c,p] = await Promise.all([
+    sb.from('orders').select('*').order('created_at',{ascending:false}),
+    sb.from('clients').select('*').order('created_at',{ascending:false}),
+    sb.from('payments').select('*').order('created_at',{ascending:false})
+  ]);
+  orders=o.data||[];
+  clients=c.data||[];
+  payments=p.data||[];
+}
+
 async function login(){
   const h=await sha256(document.getElementById('pin').value);
   if(h===MASTER_HASH){
     document.getElementById('gate').style.display='none';
     document.getElementById('panel').style.display='block';
     document.getElementById('btnOut').style.display='block';
+    await loadData();
     render();
+    sb.from('activity_log').insert({action:'master_login',entity:'system'});
   } else {
     document.getElementById('pinErr').style.display='block';
     document.getElementById('pin').value='';
@@ -262,12 +278,6 @@ function logout(){
   document.getElementById('btnOut').style.display='none';
   document.getElementById('pin').value='';
   document.getElementById('pinErr').style.display='none';
-}
-
-function save(){
-  localStorage.setItem('tw_clients',JSON.stringify(clients));
-  localStorage.setItem('tw_payments',JSON.stringify(payments));
-  localStorage.setItem('tw_orders',JSON.stringify(orders));
 }
 
 const allTabs=['pedidos','clientes','cobros','registrar','config'];
@@ -285,9 +295,9 @@ function renderStats(){
   const active=clients.filter(c=>c.status==='activo').length;
   const newO=orders.filter(o=>o.status==='nuevo').length;
   const pend=payments.filter(p=>p.status==='pendiente').length;
-  const over=payments.filter(p=>p.status==='vencido'||(p.status==='pendiente'&&new Date(p.due)<new Date())).length;
-  const paid=payments.filter(p=>p.status==='pagado').reduce((s,p)=>s+p.amount,0);
-  const monthly=clients.filter(c=>c.status==='activo').reduce((s,c)=>{const p={basico:350,profesional:600,premium:950};return s+(p[c.plan]||0);},0);
+  const over=payments.filter(p=>p.status==='vencido'||(p.status==='pendiente'&&new Date(p.due_date)<new Date())).length;
+  const paid=payments.filter(p=>p.status==='pagado').reduce((s,p)=>s+Number(p.amount),0);
+  const monthly=clients.filter(c=>c.status==='activo').reduce((s,c)=>{const pr={basico:350,profesional:600,premium:950};return s+(pr[c.plan]||0);},0);
   document.getElementById('stats').innerHTML=`
     <div class="stat purple"><b>${newO}</b><span>Pedidos nuevos</span></div>
     <div class="stat blue"><b>${active}</b><span>Clientes activos</span></div>
@@ -301,85 +311,98 @@ function renderOrders(list){
   const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
   const b=document.getElementById('ordersBody');
   if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">Sin pedidos</td></tr>';return;}
-  b.innerHTML=list.map((o,i)=>`<tr>
+  b.innerHTML=list.map(o=>`<tr>
     <td><b>${o.name}</b><br><span style="font-size:11px;color:var(--gray)">${o.phone||''}</span></td>
     <td>${o.business}</td><td>${o.type||'—'}</td><td>${plans[o.plan]||o.plan}</td>
-    <td><span class="badge ${o.status}">${o.status}</span></td><td>${o.date||'—'}</td>
+    <td><span class="badge ${o.status}">${o.status}</span></td><td>${(o.created_at||'').slice(0,10)}</td>
     <td><div class="row-acts">
       ${o.phone?`<button class="row-btn wa" title="WhatsApp" onclick="openWA('${o.phone}')">${svgWA}</button>`:''}
-      <button class="row-btn ok" title="Convertir" onclick="convertOrder(${i})">${svgOk}</button>
-      <button class="row-btn blue" title="Contactado" onclick="markOrder(${i},'contactado')">${svgChat}</button>
-      <button class="row-btn del" title="Rechazar" onclick="markOrder(${i},'rechazado')">${svgX}</button>
+      <button class="row-btn ok" title="Convertir" onclick="convertOrder('${o.id}')">${svgOk}</button>
+      <button class="row-btn blue" title="Contactado" onclick="markOrder('${o.id}','contactado')">${svgChat}</button>
+      <button class="row-btn del" title="Rechazar" onclick="markOrder('${o.id}','rechazado')">${svgX}</button>
     </div></td></tr>`).join('');
 }
 
-function convertOrder(i){
-  const o=orders[i];
-  clients.push({name:o.name,business:o.business,phone:o.phone,plan:o.plan,pin:'1234',setup:0,date:new Date().toISOString().slice(0,10),notes:o.notes||'',status:'activo'});
-  orders[i].status='convertido';save();render();
+async function convertOrder(id){
+  const o=orders.find(x=>x.id===id);
+  if(!o)return;
+  await sb.from('clients').insert({name:o.name,business:o.business,phone:o.phone,plan:o.plan,pin:'1234',start_date:new Date().toISOString().slice(0,10),notes:o.notes||'',status:'activo'});
+  await sb.from('orders').update({status:'convertido'}).eq('id',id);
+  await sb.from('activity_log').insert({action:'order_converted',entity:'orders',entity_id:id,details:{name:o.name}});
+  await loadData();render();
 }
-function markOrder(i,s){orders[i].status=s;save();render();}
+async function markOrder(id,s){
+  await sb.from('orders').update({status:s}).eq('id',id);
+  await loadData();render();
+}
 
 function renderClients(list){
   const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
   const prices={basico:'$350',profesional:'$600',premium:'$950'};
   const b=document.getElementById('clientsBody');
   if(!list.length){b.innerHTML='<tr><td colspan="9" class="empty">Sin clientes</td></tr>';return;}
-  b.innerHTML=list.map((c,i)=>`<tr>
+  b.innerHTML=list.map(c=>`<tr>
     <td><b>${c.name}</b></td><td>${c.business}</td><td>${c.phone||'—'}</td><td><code>${c.pin||'1234'}</code></td>
     <td>${plans[c.plan]||c.plan}</td><td>${prices[c.plan]||'—'}</td>
-    <td><span class="badge ${c.status}">${c.status}</span></td><td>${c.date||'—'}</td>
+    <td><span class="badge ${c.status}">${c.status}</span></td><td>${c.start_date||'—'}</td>
     <td><div class="row-acts">
       ${c.phone?`<button class="row-btn wa" title="WhatsApp" onclick="openWA('${c.phone}')">${svgWA}</button>`:''}
-      <button class="row-btn del" title="Eliminar" onclick="delClient(${i})">${svgDel}</button>
+      <button class="row-btn del" title="Eliminar" onclick="delClient('${c.id}')">${svgDel}</button>
     </div></td></tr>`).join('');
 }
 
 function renderPayments(list){
-  list.forEach(p=>{if(p.status==='pendiente'&&new Date(p.due)<new Date())p.status='vencido';});save();
   const concepts={setup:'Setup inicial',renta:'Renta mensual',extra:'Servicio extra'};
   const b=document.getElementById('paymentsBody');
   if(!list.length){b.innerHTML='<tr><td colspan="6" class="empty">Sin cobros</td></tr>';return;}
-  b.innerHTML=list.map((p,i)=>`<tr>
-    <td><b>${p.client}</b></td><td>${concepts[p.concept]||p.concept}</td><td><b>$${p.amount.toLocaleString()}</b></td>
-    <td><span class="badge ${p.status}">${p.status}</span></td><td>${p.due||'—'}</td>
+  b.innerHTML=list.map(p=>{
+    const st=p.status==='pendiente'&&new Date(p.due_date)<new Date()?'vencido':p.status;
+    return `<tr>
+    <td><b>${p.client_name}</b></td><td>${concepts[p.concept]||p.concept}</td><td><b>$${Number(p.amount).toLocaleString()}</b></td>
+    <td><span class="badge ${st}">${st}</span></td><td>${p.due_date||'—'}</td>
     <td><div class="row-acts">
-      ${p.status!=='pagado'?`<button class="row-btn ok" title="Pagado" onclick="markPaid(${i})">${svgOk}</button>`:''}
-      <button class="row-btn del" title="Eliminar" onclick="delPayment(${i})">${svgDel}</button>
-    </div></td></tr>`).join('');
+      ${st!=='pagado'?`<button class="row-btn ok" title="Pagado" onclick="markPaid('${p.id}')">${svgOk}</button>`:''}
+      <button class="row-btn del" title="Eliminar" onclick="delPayment('${p.id}')">${svgDel}</button>
+    </div></td></tr>`;
+  }).join('');
 }
 
-function addClient(){
+async function addClient(){
   const name=document.getElementById('fName').value.trim();
   const biz=document.getElementById('fBiz').value.trim();
   const phone=document.getElementById('fPhone').value.trim();
   const pin=document.getElementById('fPin').value.trim()||'1234';
   const plan=document.getElementById('fPlan').value;
   const setup=parseFloat(document.getElementById('fSetup').value)||0;
-  const date=document.getElementById('fDate').value;
+  const date=document.getElementById('fDate').value||null;
   const notes=document.getElementById('fNotes').value.trim();
   if(!name||!biz){alert('Nombre y negocio son obligatorios');return;}
-  clients.push({name,business:biz,phone,pin,plan,setup,date,notes,status:'activo'});
-  if(setup>0)payments.push({client:name,concept:'setup',amount:setup,status:'pagado',due:date});
-  save();render();clearForm();
+  const {data}=await sb.from('clients').insert({name,business:biz,phone,pin,plan,setup,start_date:date,notes,status:'activo'}).select();
+  if(setup>0&&data&&data[0]){
+    await sb.from('payments').insert({client_id:data[0].id,client_name:name,concept:'setup',amount:setup,status:'pagado',due_date:date});
+  }
+  await sb.from('activity_log').insert({action:'client_created',entity:'clients',details:{name,plan}});
+  await loadData();render();clearForm();
   switchTab('clientes',document.querySelectorAll('.tab-btn')[1]);
 }
 
-function addPayment(){
-  const client=document.getElementById('fPayClient').value;
+async function addPayment(){
+  const clientName=document.getElementById('fPayClient').value;
   const concept=document.getElementById('fConcept').value;
   const amount=parseFloat(document.getElementById('fAmount').value)||0;
   const status=document.getElementById('fPayStatus').value;
-  const due=document.getElementById('fDue').value;
-  if(!client||!amount){alert('Cliente y monto son obligatorios');return;}
-  payments.push({client,concept,amount,status,due});
-  save();render();
+  const due=document.getElementById('fDue').value||null;
+  if(!clientName||!amount){alert('Cliente y monto son obligatorios');return;}
+  const client=clients.find(c=>c.name===clientName);
+  await sb.from('payments').insert({client_id:client?.id||null,client_name:clientName,concept,amount,status,due_date:due});
+  await sb.from('activity_log').insert({action:'payment_created',entity:'payments',details:{client:clientName,amount}});
+  await loadData();render();
   switchTab('cobros',document.querySelectorAll('.tab-btn')[2]);
 }
 
-function delClient(i){if(!confirm('¿Eliminar?'))return;clients.splice(i,1);save();render();}
-function delPayment(i){if(!confirm('¿Eliminar?'))return;payments.splice(i,1);save();render();}
-function markPaid(i){payments[i].status='pagado';save();render();}
+async function delClient(id){if(!confirm('¿Eliminar?'))return;await sb.from('clients').delete().eq('id',id);await loadData();render();}
+async function delPayment(id){if(!confirm('¿Eliminar?'))return;await sb.from('payments').delete().eq('id',id);await loadData();render();}
+async function markPaid(id){await sb.from('payments').update({status:'pagado',paid_at:new Date().toISOString()}).eq('id',id);await loadData();render();}
 
 function openWA(phone){if(!phone)return;const n=phone.startsWith('52')?phone:'52'+phone;window.open('https://wa.me/'+n,'_blank');}
 
@@ -395,13 +418,13 @@ function filterOrders(q){q=q.toLowerCase();renderOrders(orders.filter(o=>(o.name
 function filterOrderStatus(s){renderOrders(s?orders.filter(o=>o.status===s):orders);}
 function filterClients(q){q=q.toLowerCase();renderClients(clients.filter(c=>c.name.toLowerCase().includes(q)||c.business.toLowerCase().includes(q)));}
 function filterCStatus(s){renderClients(s?clients.filter(c=>c.status===s):clients);}
-function filterPayments(q){q=q.toLowerCase();renderPayments(payments.filter(p=>p.client.toLowerCase().includes(q)));}
+function filterPayments(q){q=q.toLowerCase();renderPayments(payments.filter(p=>p.client_name.toLowerCase().includes(q)));}
 function filterPStatus(s){renderPayments(s?payments.filter(p=>p.status===s):payments);}
 
 function renderSummary(){
   const tot=orders.length;const conv=orders.filter(o=>o.status==='convertido').length;
   const rate=tot?Math.round(conv/tot*100):0;
-  const rev=payments.filter(p=>p.status==='pagado').reduce((s,p)=>s+p.amount,0);
+  const rev=payments.filter(p=>p.status==='pagado').reduce((s,p)=>s+Number(p.amount),0);
   document.getElementById('summary').innerHTML=`
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
       <div style="padding:14px;background:var(--soft);border-radius:10px"><b style="font-size:22px">${tot}</b><br><span style="font-size:12px;color:var(--gray)">Pedidos totales</span></div>
@@ -411,26 +434,38 @@ function renderSummary(){
     </div>`;
 }
 
-function exportData(){
+async function exportData(){
   const d=JSON.stringify({clients,payments,orders,exported:new Date().toISOString()},null,2);
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:'application/json'}));
   a.download='trazo-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
 }
 function exportCSV(){
   let csv='Nombre,Negocio,Teléfono,PIN,Paquete,Estado,Fecha\n';
-  clients.forEach(c=>{csv+=`"${c.name}","${c.business}","${c.phone}","${c.pin||'1234'}","${c.plan}","${c.status}","${c.date}"\n`;});
+  clients.forEach(c=>{csv+=`"${c.name}","${c.business}","${c.phone}","${c.pin||'1234'}","${c.plan}","${c.status}","${c.start_date}"\n`;});
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download='clientes-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 }
-function importData(){
+async function importData(){
   const file=document.getElementById('importFile').files[0];
   if(!file){alert('Selecciona un archivo');return;}
-  const r=new FileReader();
-  r.onload=function(e){try{const d=JSON.parse(e.target.result);if(d.clients)clients=d.clients;if(d.payments)payments=d.payments;if(d.orders)orders=d.orders;save();render();alert('Importado');}catch(err){alert('Error');}};
-  r.readAsText(file);
+  const text=await file.text();
+  try{
+    const d=JSON.parse(text);
+    if(d.clients?.length) for(const c of d.clients) await sb.from('clients').upsert(c);
+    if(d.payments?.length) for(const p of d.payments) await sb.from('payments').upsert(p);
+    if(d.orders?.length) for(const o of d.orders) await sb.from('orders').upsert(o);
+    await loadData();render();alert('Importado');
+  }catch(err){alert('Error: '+err.message);}
 }
-function clearOrders(){if(!confirm('¿Eliminar TODOS los pedidos?'))return;orders=[];save();render();}
-function clearAll(){if(!confirm('¿Borrar TODO?'))return;if(!confirm('¿Seguro? No se puede deshacer.'))return;clients=[];payments=[];orders=[];save();render();}
+async function clearOrders(){if(!confirm('¿Eliminar TODOS los pedidos?'))return;await sb.from('orders').delete().neq('id','00000000-0000-0000-0000-000000000000');orders=[];render();}
+async function clearAll(){if(!confirm('¿Borrar TODO?'))return;if(!confirm('¿Seguro? No se puede deshacer.'))return;
+  await Promise.all([
+    sb.from('payments').delete().neq('id','00000000-0000-0000-0000-000000000000'),
+    sb.from('orders').delete().neq('id','00000000-0000-0000-0000-000000000000'),
+    sb.from('clients').delete().neq('id','00000000-0000-0000-0000-000000000000')
+  ]);
+  clients=[];payments=[];orders=[];render();
+}
 </script>
 </body>
 </html>

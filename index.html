@@ -28,6 +28,12 @@
       }
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL='https://rqjsvehqdbgfzjsoqeto.supabase.co';
+    const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxanN2ZWhxZGJnZnpqc29xZXRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNzkzMDMsImV4cCI6MjA5Nzc1NTMwM30.C4S3QuCCo3-X2SSscBBbkL2Y0b9NjlyWE2ErbhZdrRg';
+    const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  </script>
   <style>
     html { scroll-behavior: smooth; }
     .whatsapp-float {
@@ -496,7 +502,7 @@
   </section>
 
   <script>
-  document.getElementById('orderForm').addEventListener('submit', function(e){
+  document.getElementById('orderForm').addEventListener('submit', async function(e){
     e.preventDefault();
     const name = document.getElementById('oName').value.trim();
     const biz = document.getElementById('oBiz').value.trim();
@@ -506,10 +512,11 @@
     const notes = document.getElementById('oNotes').value.trim();
     const plans = {basico:'Básico ($350/mes)',profesional:'Profesional ($600/mes)',premium:'Premium ($950/mes)'};
 
-    // Save to localStorage for admin
-    const orders = JSON.parse(localStorage.getItem('tw_orders')||'[]');
-    orders.push({name,business:biz,phone,type,plan,notes,date:new Date().toISOString().slice(0,10),status:'nuevo'});
-    localStorage.setItem('tw_orders',JSON.stringify(orders));
+    // Save to Supabase
+    await sb.from('orders').insert({name,business:biz,phone,type,plan,notes,status:'nuevo'});
+
+    // Log activity
+    await sb.from('activity_log').insert({action:'order_created',entity:'orders',details:{name,business:biz,plan}});
 
     // Send WhatsApp
     const msg = `Hola, quiero solicitar un sitio web:\n\n` +
@@ -523,6 +530,9 @@
     document.getElementById('orderSuccess').classList.remove('hidden');
     this.reset();
   });
+
+  // Track visit
+  sb.from('visits').insert({page:location.pathname,referrer:document.referrer,user_agent:navigator.userAgent});
   </script>
 
   <!-- CTA FINAL -->

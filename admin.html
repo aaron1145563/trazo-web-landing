@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mi Sitio Web · Trazo Web Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--brand:#1F4E79;--brand-d:#163a5c;--brand-light:#85B7EB;--ink:#202229;--gray:#6b7078;--line:#e8e8ea;--soft:#F7F6F3;--green:#25D366;--red:#e74c3c;--yellow:#f0a818;--blue:#1a73e8}
@@ -175,27 +176,19 @@ td{padding:12px 14px;border-top:1px solid var(--line)}
 </div>
 
 <script>
+const SUPABASE_URL='https://rqjsvehqdbgfzjsoqeto.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxanN2ZWhxZGJnZnpqc29xZXRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNzkzMDMsImV4cCI6MjA5Nzc1NTMwM30.C4S3QuCCo3-X2SSscBBbkL2Y0b9NjlyWE2ErbhZdrRg';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentClient = null;
 
-function getAllClients(){
-  return JSON.parse(localStorage.getItem('tw_clients')||'[]');
-}
-function getAllPayments(){
-  return JSON.parse(localStorage.getItem('tw_payments')||'[]');
-}
-function getClientData(){
-  return JSON.parse(localStorage.getItem('tw_client_data')||'{}');
-}
-
-function clientLogin(){
-  const phone = document.getElementById('loginPhone').value.trim();
+async function clientLogin(){
+  const phone = document.getElementById('loginPhone').value.trim().replace(/\D/g,'');
   const pin = document.getElementById('loginPin').value.trim();
-  const clients = getAllClients();
 
-  const client = clients.find(c => {
+  const {data:clients} = await sb.from('clients').select('*');
+  const client = (clients||[]).find(c => {
     const cPhone = (c.phone||'').replace(/\D/g,'');
-    const inputPhone = phone.replace(/\D/g,'');
-    return (cPhone === inputPhone || cPhone === '52'+inputPhone || '52'+cPhone === inputPhone) && (c.pin||'1234') === pin;
+    return (cPhone === phone || cPhone === '52'+phone || '52'+cPhone === phone) && (c.pin||'1234') === pin;
   });
 
   if(client){
@@ -203,7 +196,8 @@ function clientLogin(){
     document.getElementById('gate').style.display='none';
     document.getElementById('dashboard').style.display='block';
     document.getElementById('btnLogout').style.display='block';
-    renderDashboard();
+    await sb.from('activity_log').insert({action:'client_login',entity:'clients',entity_id:client.id,details:{name:client.name}});
+    await renderDashboard();
   } else {
     document.getElementById('loginErr').style.display='block';
   }
@@ -219,22 +213,24 @@ function logout(){
   document.getElementById('loginErr').style.display='none';
 }
 
-function renderDashboard(){
+async function renderDashboard(){
   const c = currentClient;
-  const clientData = getClientData()[c.phone] || {};
-  const allPayments = getAllPayments();
-  const myPayments = allPayments.filter(p => p.client === c.name);
+  const {data:myPayments} = await sb.from('payments').select('*').eq('client_name',c.name);
+  const payments = myPayments || [];
+
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const {count:visitCount} = await sb.from('visits').select('*',{count:'exact',head:true}).eq('client_id',c.id).gte('created_at',monthStart);
+
   const plans = {basico:'Básico',profesional:'Profesional',premium:'Premium'};
   const prices = {basico:350,profesional:600,premium:950};
   const monthlyPrice = prices[c.plan] || 0;
 
-  // Welcome
   document.getElementById('welcomeMsg').innerHTML = `
     <h1>Hola, ${c.name.split(' ')[0]}</h1>
     <p>${c.business} · Plan ${plans[c.plan]||c.plan}</p>
   `;
 
-  // Site status
   const isActive = c.status === 'activo';
   document.getElementById('siteStatus').innerHTML = `
     <div class="status-dot ${isActive?'online':'offline'}"></div>
@@ -244,11 +240,10 @@ function renderDashboard(){
     </div>
   `;
 
-  // Stats
-  const totalPaid = myPayments.filter(p=>p.status==='pagado').reduce((s,p)=>s+p.amount,0);
-  const pendingCount = myPayments.filter(p=>p.status==='pendiente'||p.status==='vencido').length;
-  const visits = clientData.visits || Math.floor(Math.random()*150+50);
-  const monthsActive = c.date ? Math.max(1, Math.round((new Date()-new Date(c.date))/(1000*60*60*24*30))) : 1;
+  const totalPaid = payments.filter(p=>p.status==='pagado').reduce((s,p)=>s+Number(p.amount),0);
+  const pendingCount = payments.filter(p=>p.status==='pendiente'||p.status==='vencido').length;
+  const visits = visitCount || 0;
+  const monthsActive = c.start_date ? Math.max(1, Math.round((new Date()-new Date(c.start_date))/(1000*60*60*24*30))) : 1;
 
   document.getElementById('clientStats').innerHTML = `
     <div class="stat brand"><b>${visits}</b><span>Visitas este mes</span></div>
@@ -257,17 +252,16 @@ function renderDashboard(){
     <div class="stat ${pendingCount?'red':'green'}"><b>${pendingCount}</b><span>Pagos pendientes</span></div>
   `;
 
-  // Next payment
-  const pendingPayments = myPayments.filter(p=>p.status==='pendiente'||p.status==='vencido').sort((a,b)=>new Date(a.due)-new Date(b.due));
+  const pendingPayments = payments.filter(p=>p.status==='pendiente'||p.status==='vencido').sort((a,b)=>new Date(a.due_date)-new Date(b.due_date));
   if(pendingPayments.length){
     const next = pendingPayments[0];
-    const isOverdue = new Date(next.due) < new Date();
+    const isOverdue = new Date(next.due_date) < now;
     document.getElementById('nextPayment').innerHTML = `
       <div class="next-pay" style="${isOverdue?'background:linear-gradient(135deg,#fef0f0,#fff5f5);border-color:#f5a3a3':''}">
-        <div class="amount">$${next.amount.toLocaleString()}</div>
+        <div class="amount">$${Number(next.amount).toLocaleString()}</div>
         <div class="detail">
           <b>${isOverdue?'Pago vencido':'Próximo pago'}</b>
-          <span>Fecha límite: ${formatDate(next.due)}</span>
+          <span>Fecha límite: ${formatDate(next.due_date)}</span>
         </div>
       </div>
     `;
@@ -286,29 +280,27 @@ function renderDashboard(){
     `;
   }
 
-  // Payment history
   const histBody = document.getElementById('payHistory');
   const concepts = {setup:'Setup inicial',renta:'Renta mensual',extra:'Servicio extra'};
-  if(!myPayments.length){
+  if(!payments.length){
     histBody.innerHTML='<tr><td colspan="4" class="empty">Sin pagos registrados aún</td></tr>';
   } else {
-    histBody.innerHTML = myPayments.sort((a,b)=>new Date(b.due)-new Date(a.due)).map(p=>{
-      const st = p.status==='pendiente'&&new Date(p.due)<new Date()?'vencido':p.status;
+    histBody.innerHTML = payments.sort((a,b)=>new Date(b.due_date)-new Date(a.due_date)).map(p=>{
+      const st = p.status==='pendiente'&&new Date(p.due_date)<now?'vencido':p.status;
       return `<tr>
         <td>${concepts[p.concept]||p.concept}</td>
-        <td><b>$${p.amount.toLocaleString()}</b></td>
+        <td><b>$${Number(p.amount).toLocaleString()}</b></td>
         <td><span class="badge ${st}">${st}</span></td>
-        <td>${formatDate(p.due)}</td>
+        <td>${formatDate(p.due_date)}</td>
       </tr>`;
     }).join('');
   }
 
-  // Site info
   document.getElementById('siteInfo').innerHTML = `
     <div style="display:grid;grid-template-columns:120px 1fr;gap:8px 14px;font-size:13px">
       <b>Plan</b><span>${plans[c.plan]||c.plan}</span>
       <b>Renta mensual</b><span>$${monthlyPrice.toLocaleString()} MXN</span>
-      <b>Desde</b><span>${c.date?formatDate(c.date):'—'}</span>
+      <b>Desde</b><span>${c.start_date?formatDate(c.start_date):'—'}</span>
       <b>Estado</b><span>${c.status==='activo'?'✅ Activo':'❌ Inactivo'}</span>
       <b>Incluye</b><span>Hosting, SSL, mantenimiento y soporte</span>
       <b>Respaldo</b><span>Automático — tu sitio siempre está seguro</span>
