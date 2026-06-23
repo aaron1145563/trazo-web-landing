@@ -4,86 +4,87 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Mi Sitio Web · Trazo Web Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--brand:#1F4E79;--brand-d:#163a5c;--brand-light:#85B7EB;--ink:#202229;--gray:#6b7078;--line:#e8e8ea;--soft:#F7F6F3;--green:#25D366;--red:#e74c3c;--yellow:#f0a818;--blue:#1a73e8}
+:root{--brand:#1F4E79;--accent:#0e8a4f;--ink:#202229;--gray:#6b7078;--line:#e8e8ea;--soft:#f5f5f5;--green:#25D366;--red:#e74c3c;--yellow:#f0a818;--blue:#1a73e8}
 body{font-family:'Inter',sans-serif;background:var(--soft);color:var(--ink)}
 button{font-family:inherit;cursor:pointer}
 
-nav{background:var(--brand);color:#fff;position:sticky;top:0;z-index:50}
-.nav-in{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
-.nav-title{display:flex;align-items:center;gap:10px}
-.nav-title b{font-size:16px;font-weight:700}
-.nav-out{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;display:none}
+/* NAV */
+nav{background:var(--accent);color:#fff;position:sticky;top:0;z-index:50}
+.nav-in{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.nav-in b{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.nav-out{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;display:none}
 
 /* GATE */
 .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .gate-box{background:#fff;border-radius:16px;padding:40px 32px;width:100%;max-width:380px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08)}
-.gate-box .logo{margin-bottom:20px}
-.gate-box h2{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:6px;color:var(--brand)}
+.gate-box h2{font-size:20px;font-weight:800;margin-bottom:6px;color:var(--accent)}
 .gate-box p{font-size:13px;color:var(--gray);margin-bottom:24px}
 .gate-field{text-align:left;margin-bottom:14px}
 .gate-field label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px}
 .gate-field input{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:13px 14px;font-size:15px;outline:none}
-.gate-field input:focus{border-color:var(--brand)}
-.gate-go{width:100%;background:var(--brand);color:#fff;border:none;font-size:14px;font-weight:700;padding:14px;border-radius:9px;margin-top:6px}
-.gate-go:hover{background:var(--brand-d)}
+.gate-field input:focus{border-color:var(--accent)}
+.gate-go{width:100%;background:var(--accent);color:#fff;border:none;font-size:14px;font-weight:700;padding:14px;border-radius:9px;margin-top:6px}
+.gate-go:hover{background:#0b7a44}
 .gate-err{color:var(--red);font-size:12px;margin-top:10px;display:none}
 
-/* DASHBOARD */
-.wrap{max-width:900px;margin:0 auto;padding:20px;display:none}
-.welcome{margin-bottom:24px}
-.welcome h1{font-family:'DM Serif Display',serif;font-size:26px;color:var(--brand)}
-.welcome p{font-size:14px;color:var(--gray);margin-top:4px}
+/* WRAP */
+.wrap{max-width:960px;margin:0 auto;padding:20px;display:none}
 
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
-.stat{background:#fff;border-radius:14px;padding:22px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.stat b{font-size:30px;font-weight:800;display:block}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat{background:#fff;border-radius:14px;padding:22px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05);border:1px solid var(--line)}
+.stat b{font-size:28px;font-weight:800;display:block}
 .stat span{font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;font-weight:600;margin-top:4px;display:block}
-.stat.green b{color:#2e9e5b}.stat.yellow b{color:var(--yellow)}.stat.red b{color:var(--red)}.stat.blue b{color:var(--blue)}.stat.brand b{color:var(--brand)}
 
-.card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:20px}
-.card h3{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card h3 .icon{font-size:18px}
+/* TABS */
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--line)}
+.tab-btn{background:none;border:none;padding:12px 22px;font-size:14px;font-weight:600;color:var(--gray);border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer}
+.tab-btn.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:700}
 
-/* STATUS BAR */
-.status-bar{display:flex;align-items:center;gap:12px;padding:16px 20px;background:linear-gradient(135deg,#e8f4fd,#f0f7ff);border-radius:12px;margin-bottom:20px}
-.status-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-.status-dot.online{background:#2e9e5b;box-shadow:0 0 8px rgba(46,158,91,.4)}
-.status-dot.offline{background:var(--red)}
-.status-info{flex:1}
-.status-info b{font-size:13px;display:block}
-.status-info span{font-size:12px;color:var(--gray)}
+/* FILTERS */
+.filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.filters input{flex:1;min-width:200px;border:1.5px solid var(--line);border-radius:9px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;background:#fff}
+.filters select{border:1.5px solid var(--line);border-radius:9px;padding:11px 14px;font-size:13px;font-family:inherit;outline:none;background:#fff;font-weight:600}
+
+/* ORDER CARD */
+.order-card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:16px;border:1px solid var(--line)}
+.order-card .badge{margin-bottom:12px}
+.order-row{display:grid;grid-template-columns:140px 1fr;gap:6px 14px;font-size:14px;margin-bottom:6px}
+.order-row b{color:var(--gray);font-weight:600}
+.order-total{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:14px}
+.order-total span{font-size:26px;font-weight:800}
+.order-date{text-align:right;font-size:12px;color:var(--gray);margin-top:8px}
+.badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:12px}
+.badge.nuevo{background:#d1fae5;color:#065f46}
+.badge.activo{background:#dcebff;color:#1a4f9e}
+.badge.pagado{background:#d1fae5;color:#065f46}
+.badge.pendiente{background:#fff3d6;color:#9a6c00}
+.badge.vencido{background:#fde8e8;color:var(--red)}
+.badge.cancelado{background:#f0f0f2;color:var(--gray)}
+
+/* CLIENT CARD */
+.info-grid{display:grid;grid-template-columns:140px 1fr;gap:8px 14px;font-size:14px}
+.info-grid b{color:var(--gray);font-weight:600}
 
 /* TABLE */
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);border-bottom:2px solid var(--line)}
 td{padding:12px 14px;border-top:1px solid var(--line)}
-.badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:12px}
-.badge.pagado{background:#dcf5e5;color:#1c7a43}
-.badge.pendiente{background:#fff3d6;color:#9a6c00}
-.badge.vencido{background:#fde8e8;color:var(--red)}
-.badge.proximo{background:#dbeafe;color:#1e40af}
 
-/* NEXT PAYMENT */
-.next-pay{display:flex;align-items:center;gap:16px;padding:18px;background:linear-gradient(135deg,#fef9e7,#fff8e1);border-radius:12px;border:1px solid #f5e6a3}
-.next-pay .amount{font-size:32px;font-weight:800;color:var(--yellow)}
-.next-pay .detail b{font-size:14px;display:block}
-.next-pay .detail span{font-size:12px;color:var(--gray)}
+.empty{padding:40px;text-align:center;color:var(--gray);font-size:14px}
 
 /* SUPPORT */
-.support-btn{display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--green);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;width:100%;justify-content:center;text-decoration:none}
-.support-btn:hover{background:#20bd5a}
+.support-btn{display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--green);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;width:100%;justify-content:center;text-decoration:none;margin-top:20px}
 .support-btn svg{width:20px;height:20px;fill:#fff}
-
-.empty{padding:30px;text-align:center;color:var(--gray);font-size:13px}
 
 @media(max-width:600px){
   .stats{grid-template-columns:repeat(2,1fr)}
-  .next-pay{flex-direction:column;text-align:center}
-  th,td{padding:10px;font-size:12px}
+  .order-row,.info-grid{grid-template-columns:120px 1fr}
+  .tab-btn{padding:10px 14px;font-size:13px}
 }
 </style>
 </head>
@@ -91,28 +92,13 @@ td{padding:12px 14px;border-top:1px solid var(--line)}
 
 <nav>
   <div class="nav-in">
-    <div class="nav-title">
-      <svg width="24" height="24" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#85B7EB" stroke-width="6" stroke-linecap="round"/>
-        <path d="M20 15 L 70 15" fill="none" stroke="#85B7EB" stroke-width="6" stroke-linecap="round"/>
-        <circle cx="75" cy="65" r="4.5" fill="#85B7EB"/>
-      </svg>
-      <b>Mi Sitio Web</b>
-    </div>
+    <b>&#128202; Administrador · Trazo Web Studio</b>
     <button class="nav-out" id="btnLogout" onclick="logout()">Salir</button>
   </div>
 </nav>
 
-<!-- LOGIN -->
 <div class="gate" id="gate">
   <div class="gate-box">
-    <div class="logo">
-      <svg width="48" height="48" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
-        <path d="M20 15 L 70 15" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
-        <circle cx="75" cy="65" r="4.5" fill="#1F4E79"/>
-      </svg>
-    </div>
     <h2>Panel de tu sitio web</h2>
     <p>Ingresa tus datos para ver el estado de tu página</p>
     <div class="gate-field">
@@ -125,86 +111,68 @@ td{padding:12px 14px;border-top:1px solid var(--line)}
     </div>
     <button class="gate-go" onclick="clientLogin()">Ver mi sitio</button>
     <div class="gate-err" id="loginErr">Datos incorrectos. Contacta a soporte.</div>
-    <p style="font-size:11px;color:var(--gray);margin-top:16px">¿No tienes tu PIN? Escríbenos por WhatsApp y te lo damos.</p>
+    <p style="font-size:11px;color:var(--gray);margin-top:16px">¿No tienes tu PIN? Escríbenos por WhatsApp.</p>
   </div>
 </div>
 
-<!-- CLIENT DASHBOARD -->
 <div class="wrap" id="dashboard">
-
-  <div class="welcome" id="welcomeMsg"></div>
-
-  <!-- SITE STATUS -->
-  <div class="status-bar" id="siteStatus"></div>
-
   <!-- STATS -->
   <div class="stats" id="clientStats"></div>
 
-  <!-- NEXT PAYMENT -->
-  <div class="card">
-    <h3><span class="icon">&#128176;</span> Próximo cobro</h3>
-    <div id="nextPayment"></div>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn on" onclick="switchTab('pedidos',this)">Pedidos</button>
+    <button class="tab-btn" onclick="switchTab('clientes',this)">Clientes</button>
+    <button class="tab-btn" onclick="switchTab('pagos',this)">Pagos</button>
   </div>
 
-  <!-- PAYMENT HISTORY -->
-  <div class="card">
-    <h3><span class="icon">&#128203;</span> Historial de pagos</h3>
-    <div style="overflow-x:auto">
-      <table>
-        <thead><tr><th>Concepto</th><th>Monto</th><th>Estado</th><th>Fecha</th></tr></thead>
-        <tbody id="payHistory"></tbody>
-      </table>
-    </div>
-  </div>
+  <!-- PEDIDOS -->
+  <div id="tab-pedidos"></div>
 
-  <!-- SITE INFO -->
-  <div class="card">
-    <h3><span class="icon">&#127760;</span> Tu sitio web</h3>
-    <div id="siteInfo"></div>
-  </div>
+  <!-- CLIENTES (su info) -->
+  <div id="tab-clientes" style="display:none"></div>
+
+  <!-- PAGOS -->
+  <div id="tab-pagos" style="display:none"></div>
 
   <!-- SUPPORT -->
-  <div class="card">
-    <h3><span class="icon">&#128172;</span> ¿Necesitas ayuda?</h3>
-    <p style="font-size:13px;color:var(--gray);margin-bottom:14px">Si tienes dudas, quieres hacer cambios en tu página o necesitas soporte, escríbenos por WhatsApp.</p>
-    <a href="https://wa.me/5215573046389?text=Hola%2C%20necesito%20ayuda%20con%20mi%20sitio%20web" class="support-btn" target="_blank">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-      Escribir a soporte
-    </a>
-  </div>
-
+  <a href="https://wa.me/5215573046389?text=Hola%2C%20necesito%20ayuda%20con%20mi%20sitio%20web" class="support-btn" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+    Escribir a soporte
+  </a>
 </div>
 
 <script>
 const SUPABASE_URL='https://rqjsvehqdbgfzjsoqeto.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxanN2ZWhxZGJnZnpqc29xZXRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNzkzMDMsImV4cCI6MjA5Nzc1NTMwM30.C4S3QuCCo3-X2SSscBBbkL2Y0b9NjlyWE2ErbhZdrRg';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentClient = null;
+let currentClient=null, myPayments=[], myOrders=[], myVisits=0;
 
 async function clientLogin(){
-  const phone = document.getElementById('loginPhone').value.trim().replace(/\D/g,'');
-  const pin = document.getElementById('loginPin').value.trim();
-
-  const {data:clients} = await sb.from('clients').select('*');
-  const client = (clients||[]).find(c => {
-    const cPhone = (c.phone||'').replace(/\D/g,'');
-    return (cPhone === phone || cPhone === '52'+phone || '52'+cPhone === phone) && (c.pin||'1234') === pin;
-  });
-
-  if(client){
-    currentClient = client;
-    document.getElementById('gate').style.display='none';
-    document.getElementById('dashboard').style.display='block';
-    document.getElementById('btnLogout').style.display='block';
-    await sb.from('activity_log').insert({action:'client_login',entity:'clients',entity_id:client.id,details:{name:client.name}});
-    await renderDashboard();
-  } else {
-    document.getElementById('loginErr').style.display='block';
-  }
+  const phone=document.getElementById('loginPhone').value.trim().replace(/\D/g,'');
+  const pin=document.getElementById('loginPin').value.trim();
+  try{
+    const {data:clients}=await sb.from('clients').select('*');
+    const client=(clients||[]).find(c=>{
+      const cp=(c.phone||'').replace(/\D/g,'');
+      return (cp===phone||cp==='52'+phone||'52'+cp===phone)&&(c.pin||'1234')===pin;
+    });
+    if(client){
+      currentClient=client;
+      document.getElementById('gate').style.display='none';
+      document.getElementById('dashboard').style.display='block';
+      document.getElementById('btnLogout').style.display='block';
+      sb.from('activity_log').insert({action:'client_login',entity:'clients',entity_id:client.id,details:{name:client.name}});
+      await loadClientData();
+      render();
+    } else {
+      document.getElementById('loginErr').style.display='block';
+    }
+  }catch(err){document.getElementById('loginErr').style.display='block';}
 }
 
 function logout(){
-  currentClient = null;
+  currentClient=null;
   document.getElementById('gate').style.display='flex';
   document.getElementById('dashboard').style.display='none';
   document.getElementById('btnLogout').style.display='none';
@@ -213,106 +181,107 @@ function logout(){
   document.getElementById('loginErr').style.display='none';
 }
 
-async function renderDashboard(){
-  const c = currentClient;
-  const {data:myPayments} = await sb.from('payments').select('*').eq('client_name',c.name);
-  const payments = myPayments || [];
+async function loadClientData(){
+  const c=currentClient;
+  const now=new Date();
+  const monthStart=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
+  const [pay,ord,vis]=await Promise.all([
+    sb.from('payments').select('*').eq('client_id',c.id).order('created_at',{ascending:false}),
+    sb.from('orders').select('*').eq('phone',c.phone).order('created_at',{ascending:false}),
+    sb.from('visits').select('*',{count:'exact',head:true}).eq('client_id',c.id).gte('created_at',monthStart)
+  ]);
+  myPayments=pay.data||[];
+  myOrders=ord.data||[];
+  myVisits=vis.count||0;
+}
 
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-  const {count:visitCount} = await sb.from('visits').select('*',{count:'exact',head:true}).eq('client_id',c.id).gte('created_at',monthStart);
+const allTabs=['pedidos','clientes','pagos'];
+function switchTab(t,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  allTabs.forEach(x=>{const el=document.getElementById('tab-'+x);if(el)el.style.display=x===t?'block':'none';});
+}
 
-  const plans = {basico:'Básico',profesional:'Profesional',premium:'Premium'};
-  const prices = {basico:350,profesional:600,premium:950};
-  const monthlyPrice = prices[c.plan] || 0;
+function render(){
+  const c=currentClient;
+  const totalPaid=myPayments.filter(p=>p.status==='pagado').reduce((s,p)=>s+Number(p.amount),0);
+  const newOrders=myOrders.filter(o=>o.status==='nuevo').length;
 
-  document.getElementById('welcomeMsg').innerHTML = `
-    <h1>Hola, ${c.name.split(' ')[0]}</h1>
-    <p>${c.business} · Plan ${plans[c.plan]||c.plan}</p>
+  document.getElementById('clientStats').innerHTML=`
+    <div class="stat"><b>${myVisits}</b><span>Visitas</span></div>
+    <div class="stat"><b>${myOrders.length}</b><span>Pedidos</span></div>
+    <div class="stat"><b>${newOrders}</b><span>Nuevos</span></div>
+    <div class="stat"><b>$${totalPaid.toLocaleString()}</b><span>Total pagado</span></div>
   `;
 
-  const isActive = c.status === 'activo';
-  document.getElementById('siteStatus').innerHTML = `
-    <div class="status-dot ${isActive?'online':'offline'}"></div>
-    <div class="status-info">
-      <b>Tu sitio está ${isActive?'activo y funcionando':'inactivo'}</b>
-      <span>${isActive?'Visible para todos tus clientes':'Contacta a soporte para reactivarlo'}</span>
+  renderOrders();
+  renderClientInfo();
+  renderPayments();
+}
+
+function renderOrders(){
+  const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
+  const el=document.getElementById('tab-pedidos');
+  if(!myOrders.length){el.innerHTML='<div class="empty">Sin pedidos registrados</div>';return;}
+  el.innerHTML=myOrders.map(o=>`
+    <div class="order-card">
+      <span class="badge ${o.status}">${o.status}</span>
+      <div class="order-row"><b>Código:</b><span>${o.code||'—'}</span></div>
+      <div class="order-row"><b>Cliente:</b><span>${o.name}</span></div>
+      <div class="order-row"><b>Estado:</b><span>${o.status}</span></div>
+      <div class="order-row"><b>Negocio:</b><span>${o.business||'—'}</span></div>
+      <div class="order-row"><b>Teléfono:</b><span>${o.phone||'—'}</span></div>
+      <div class="order-row"><b>Tipo:</b><span>${o.type||'—'}</span></div>
+      <div class="order-row"><b>Paquete:</b><span>${plans[o.plan]||o.plan||'—'}</span></div>
+      ${o.notes?`<div class="order-row"><b>Notas:</b><span>${o.notes}</span></div>`:''}
+      <div class="order-date">${fmtDate(o.created_at)}</div>
     </div>
-  `;
+  `).join('');
+}
 
-  const totalPaid = payments.filter(p=>p.status==='pagado').reduce((s,p)=>s+Number(p.amount),0);
-  const pendingCount = payments.filter(p=>p.status==='pendiente'||p.status==='vencido').length;
-  const visits = visitCount || 0;
-  const monthsActive = c.start_date ? Math.max(1, Math.round((new Date()-new Date(c.start_date))/(1000*60*60*24*30))) : 1;
-
-  document.getElementById('clientStats').innerHTML = `
-    <div class="stat brand"><b>${visits}</b><span>Visitas este mes</span></div>
-    <div class="stat blue"><b>${monthsActive}</b><span>${monthsActive===1?'Mes activo':'Meses activo'}</span></div>
-    <div class="stat green"><b>$${totalPaid.toLocaleString()}</b><span>Total pagado</span></div>
-    <div class="stat ${pendingCount?'red':'green'}"><b>${pendingCount}</b><span>Pagos pendientes</span></div>
-  `;
-
-  const pendingPayments = payments.filter(p=>p.status==='pendiente'||p.status==='vencido').sort((a,b)=>new Date(a.due_date)-new Date(b.due_date));
-  if(pendingPayments.length){
-    const next = pendingPayments[0];
-    const isOverdue = new Date(next.due_date) < now;
-    document.getElementById('nextPayment').innerHTML = `
-      <div class="next-pay" style="${isOverdue?'background:linear-gradient(135deg,#fef0f0,#fff5f5);border-color:#f5a3a3':''}">
-        <div class="amount">$${Number(next.amount).toLocaleString()}</div>
-        <div class="detail">
-          <b>${isOverdue?'Pago vencido':'Próximo pago'}</b>
-          <span>Fecha límite: ${formatDate(next.due_date)}</span>
-        </div>
+function renderClientInfo(){
+  const c=currentClient;
+  const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
+  const prices={basico:'$350',profesional:'$600',premium:'$950'};
+  document.getElementById('tab-clientes').innerHTML=`
+    <div class="order-card">
+      <span class="badge ${c.status}">${c.status}</span>
+      <div style="margin-top:12px" class="info-grid">
+        <b>Nombre:</b><span>${c.name}</span>
+        <b>Negocio:</b><span>${c.business}</span>
+        <b>Teléfono:</b><span>${c.phone||'—'}</span>
+        <b>Plan:</b><span>${plans[c.plan]||c.plan}</span>
+        <b>Renta mensual:</b><span>${prices[c.plan]||'—'} MXN</span>
+        <b>Desde:</b><span>${c.start_date?fmtDate(c.start_date):'—'}</span>
+        <b>Incluye:</b><span>Hosting, SSL, mantenimiento y soporte</span>
+        <b>Respaldos:</b><span>Automáticos — tu sitio siempre está seguro</span>
       </div>
-    `;
-  } else {
-    const nextDate = new Date();
-    nextDate.setMonth(nextDate.getMonth()+1);
-    nextDate.setDate(1);
-    document.getElementById('nextPayment').innerHTML = `
-      <div class="next-pay">
-        <div class="amount">$${monthlyPrice.toLocaleString()}</div>
-        <div class="detail">
-          <b>Próximo pago</b>
-          <span>Estimado: ${formatDate(nextDate.toISOString().slice(0,10))}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  const histBody = document.getElementById('payHistory');
-  const concepts = {setup:'Setup inicial',renta:'Renta mensual',extra:'Servicio extra'};
-  if(!payments.length){
-    histBody.innerHTML='<tr><td colspan="4" class="empty">Sin pagos registrados aún</td></tr>';
-  } else {
-    histBody.innerHTML = payments.sort((a,b)=>new Date(b.due_date)-new Date(a.due_date)).map(p=>{
-      const st = p.status==='pendiente'&&new Date(p.due_date)<now?'vencido':p.status;
-      return `<tr>
-        <td>${concepts[p.concept]||p.concept}</td>
-        <td><b>$${Number(p.amount).toLocaleString()}</b></td>
-        <td><span class="badge ${st}">${st}</span></td>
-        <td>${formatDate(p.due_date)}</td>
-      </tr>`;
-    }).join('');
-  }
-
-  document.getElementById('siteInfo').innerHTML = `
-    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px 14px;font-size:13px">
-      <b>Plan</b><span>${plans[c.plan]||c.plan}</span>
-      <b>Renta mensual</b><span>$${monthlyPrice.toLocaleString()} MXN</span>
-      <b>Desde</b><span>${c.start_date?formatDate(c.start_date):'—'}</span>
-      <b>Estado</b><span>${c.status==='activo'?'✅ Activo':'❌ Inactivo'}</span>
-      <b>Incluye</b><span>Hosting, SSL, mantenimiento y soporte</span>
-      <b>Respaldo</b><span>Automático — tu sitio siempre está seguro</span>
     </div>
   `;
 }
 
-function formatDate(d){
-  if(!d) return '—';
-  const date = new Date(d+'T12:00:00');
-  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+function renderPayments(){
+  const concepts={setup:'Setup inicial',renta:'Renta mensual',extra:'Servicio extra'};
+  const el=document.getElementById('tab-pagos');
+  if(!myPayments.length){el.innerHTML='<div class="empty">Sin pagos registrados</div>';return;}
+  el.innerHTML=myPayments.map(p=>{
+    const now=new Date();
+    const st=p.status==='pendiente'&&new Date(p.due_date)<now?'vencido':p.status;
+    return `<div class="order-card">
+      <span class="badge ${st}">${st}</span>
+      <div class="order-row"><b>Concepto:</b><span>${concepts[p.concept]||p.concept}</span></div>
+      <div class="order-row"><b>Monto:</b><span style="font-size:20px;font-weight:800">$${Number(p.amount).toLocaleString()}</span></div>
+      <div class="order-row"><b>Fecha límite:</b><span>${fmtDate(p.due_date)}</span></div>
+      ${p.paid_at?`<div class="order-row"><b>Pagado:</b><span>${fmtDate(p.paid_at)}</span></div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function fmtDate(d){
+  if(!d)return '—';
+  const dt=new Date(d.includes('T')?d:d+'T12:00:00');
+  const m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()}`;
 }
 </script>
 </body>
