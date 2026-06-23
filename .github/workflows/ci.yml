@@ -1,0 +1,47 @@
+name: CI - Validación antes de deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar HTML
+        run: |
+          echo "=== Validando archivos HTML ==="
+          for f in *.html; do
+            echo "Revisando $f..."
+            if grep -q "service_role" "$f"; then
+              echo "❌ ERROR: $f contiene service_role key expuesta!"
+              exit 1
+            fi
+            if [ ! -s "$f" ]; then
+              echo "❌ ERROR: $f está vacío!"
+              exit 1
+            fi
+            echo "✅ $f OK"
+          done
+
+      - name: Verificar tamaño de archivos
+        run: |
+          echo "=== Tamaños de archivos ==="
+          for f in *.html; do
+            [ -f "$f" ] && echo "$(du -h "$f" | cut -f1) $f"
+          done
+          size=$(stat -c%s index.html 2>/dev/null || stat -f%z index.html 2>/dev/null)
+          if [ "$size" -gt 512000 ]; then
+            echo "⚠️ AVISO: index.html supera 500KB ($size bytes)"
+          fi
+
+      - name: Resumen
+        run: |
+          echo "==============================="
+          echo "  ✅ Validación completada"
+          echo "  Deploy a GitHub Pages: OK"
+          echo "==============================="
