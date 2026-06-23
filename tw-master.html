@@ -125,7 +125,7 @@ tr:hover td{background:#fafaf8}
       </select>
     </div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Cliente</th><th>Negocio</th><th>Tipo</th><th>Paquete</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+      <thead><tr><th>Clave</th><th>Cliente</th><th>Negocio</th><th>Tipo</th><th>Paquete</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
       <tbody id="ordersBody"></tbody>
     </table></div>
   </div>
@@ -343,8 +343,9 @@ function renderStats(){
 function renderOrders(list){
   const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
   const b=document.getElementById('ordersBody');
-  if(!list.length){b.innerHTML='<tr><td colspan="7" class="empty">Sin pedidos</td></tr>';return;}
+  if(!list.length){b.innerHTML='<tr><td colspan="8" class="empty">Sin pedidos</td></tr>';return;}
   b.innerHTML=list.map(o=>`<tr>
+    <td><code style="font-size:15px;font-weight:700;color:var(--brand)">${o.code||'—'}</code></td>
     <td><b>${o.name}</b><br><span style="font-size:11px;color:var(--gray)">${o.phone||''}</span></td>
     <td>${o.business}</td><td>${o.type||'—'}</td><td>${plans[o.plan]||o.plan}</td>
     <td><span class="badge ${o.status}">${o.status}</span></td><td>${(o.created_at||'').slice(0,10)}</td>
