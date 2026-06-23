@@ -111,6 +111,7 @@ tr:hover td{background:#fafaf8}
     <button class="tab-btn on" onclick="switchTab('pedidos',this)">Pedidos</button>
     <button class="tab-btn" onclick="switchTab('clientes',this)">Clientes</button>
     <button class="tab-btn" onclick="switchTab('cobros',this)">Cobros</button>
+    <button class="tab-btn" onclick="switchTab('incidencias',this)">Incidencias</button>
     <button class="tab-btn" onclick="switchTab('registrar',this)">+ Registrar</button>
     <button class="tab-btn" onclick="switchTab('config',this)">&#9881; Config</button>
   </div>
@@ -197,6 +198,32 @@ tr:hover td{background:#fafaf8}
     </div>
   </div>
 
+  <!-- INCIDENCIAS -->
+  <div id="tab-incidencias" style="display:none">
+    <div class="form-card">
+      <h3>Registrar Incidencia</h3>
+      <div class="form-grid">
+        <div class="field"><label>Cliente</label><select id="fIncClient"></select></div>
+        <div class="field"><label>Título</label><input type="text" id="fIncTitle" placeholder="Caída del sitio"/></div>
+        <div class="field"><label>Severidad</label>
+          <select id="fIncSev"><option value="baja">Baja</option><option value="media">Media</option><option value="alta">Alta</option><option value="critica">Crítica</option></select>
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px"><label>Descripción</label><textarea id="fIncDesc" placeholder="Detalle del problema..."></textarea></div>
+      <div class="form-actions"><button class="btn-pri" onclick="addIncident()">Registrar incidencia</button></div>
+    </div>
+    <div class="filters">
+      <input type="text" placeholder="Buscar incidencia..." oninput="filterIncidents(this.value)"/>
+      <select onchange="filterIncStatus(this.value)">
+        <option value="">Todas</option><option value="abierta">Abiertas</option><option value="resuelta">Resueltas</option>
+      </select>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cliente</th><th>Título</th><th>Severidad</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+      <tbody id="incidentsBody"></tbody>
+    </table></div>
+  </div>
+
   <!-- CONFIG -->
   <div id="tab-config" style="display:none">
     <div class="form-card">
@@ -236,7 +263,7 @@ const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 const MASTER_HASH='9850256500d74097545e924b265cc2ab02893fa2c8e7ba7f4586db8c3eb93713';
-let clients=[],payments=[],orders=[];
+let clients=[],payments=[],orders=[],incidents=[];
 
 const svgWA='<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>';
 const svgDel='<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
@@ -247,14 +274,18 @@ const svgX='<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5
 async function sha256(m){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(m));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
 
 async function loadData(){
-  const [o,c,p] = await Promise.all([
-    sb.from('orders').select('*').order('created_at',{ascending:false}),
-    sb.from('clients').select('*').order('created_at',{ascending:false}),
-    sb.from('payments').select('*').order('created_at',{ascending:false})
-  ]);
-  orders=o.data||[];
-  clients=c.data||[];
-  payments=p.data||[];
+  try{
+    const [o,c,p,i] = await Promise.all([
+      sb.from('orders').select('*').order('created_at',{ascending:false}),
+      sb.from('clients').select('*').order('created_at',{ascending:false}),
+      sb.from('payments').select('*').order('created_at',{ascending:false}),
+      sb.from('incidents').select('*').order('created_at',{ascending:false})
+    ]);
+    orders=o.data||[];
+    clients=c.data||[];
+    payments=p.data||[];
+    incidents=i.data||[];
+  }catch(err){alert('Error al cargar datos: '+err.message);}
 }
 
 async function login(){
@@ -280,16 +311,17 @@ function logout(){
   document.getElementById('pinErr').style.display='none';
 }
 
-const allTabs=['pedidos','clientes','cobros','registrar','config'];
+const allTabs=['pedidos','clientes','cobros','incidencias','registrar','config'];
 function switchTab(t,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   allTabs.forEach(x=>{const el=document.getElementById('tab-'+x);if(el)el.style.display=x===t?'block':'none';});
   if(t==='registrar')updatePaySelect();
+  if(t==='incidencias')updateIncSelect();
   if(t==='config')renderSummary();
 }
 
-function render(){renderStats();renderOrders(orders);renderClients(clients);renderPayments(payments);updatePaySelect();}
+function render(){renderStats();renderOrders(orders);renderClients(clients);renderPayments(payments);renderIncidents(incidents);updatePaySelect();}
 
 function renderStats(){
   const active=clients.filter(c=>c.status==='activo').length;
@@ -304,7 +336,8 @@ function renderStats(){
     <div class="stat green"><b>$${paid.toLocaleString()}</b><span>Cobrado total</span></div>
     <div class="stat green"><b>$${monthly.toLocaleString()}</b><span>Ingreso mensual</span></div>
     <div class="stat yellow"><b>${pend}</b><span>Pendientes</span></div>
-    <div class="stat red"><b>${over}</b><span>Vencidos</span></div>`;
+    <div class="stat red"><b>${over}</b><span>Vencidos</span></div>
+    <div class="stat red"><b>${incidents.filter(i=>i.status==='abierta').length}</b><span>Incidencias</span></div>`;
 }
 
 function renderOrders(list){
@@ -458,6 +491,51 @@ async function importData(){
   }catch(err){alert('Error: '+err.message);}
 }
 async function clearOrders(){if(!confirm('¿Eliminar TODOS los pedidos?'))return;await sb.from('orders').delete().neq('id','00000000-0000-0000-0000-000000000000');orders=[];render();}
+function updateIncSelect(){
+  const sel=document.getElementById('fIncClient');
+  if(!sel)return;
+  sel.innerHTML='<option value="">— Sin cliente —</option>'+clients.map(c=>`<option value="${c.id}">${c.name} — ${c.business}</option>`).join('');
+}
+
+function renderIncidents(list){
+  const sevColors={baja:'activo',media:'pendiente',alta:'nuevo',critica:'vencido'};
+  const b=document.getElementById('incidentsBody');
+  if(!list.length){b.innerHTML='<tr><td colspan="6" class="empty">Sin incidencias</td></tr>';return;}
+  b.innerHTML=list.map(i=>{
+    const cli=clients.find(c=>c.id===i.client_id);
+    return `<tr>
+    <td>${cli?cli.name:'—'}</td><td><b>${i.title}</b><br><span style="font-size:11px;color:var(--gray)">${(i.description||'').slice(0,60)}</span></td>
+    <td><span class="badge ${sevColors[i.severity]||''}">${i.severity}</span></td>
+    <td><span class="badge ${i.status==='resuelta'?'pagado':'pendiente'}">${i.status}</span></td>
+    <td>${(i.created_at||'').slice(0,10)}</td>
+    <td><div class="row-acts">
+      ${i.status!=='resuelta'?`<button class="row-btn ok" title="Resolver" onclick="resolveIncident('${i.id}')">${svgOk}</button>`:''}
+      <button class="row-btn del" title="Eliminar" onclick="delIncident('${i.id}')">${svgDel}</button>
+    </div></td></tr>`;
+  }).join('');
+}
+
+async function addIncident(){
+  const client_id=document.getElementById('fIncClient').value||null;
+  const title=document.getElementById('fIncTitle').value.trim();
+  const severity=document.getElementById('fIncSev').value;
+  const description=document.getElementById('fIncDesc').value.trim();
+  if(!title){alert('El título es obligatorio');return;}
+  try{
+    await sb.from('incidents').insert({client_id,title,description,severity,status:'abierta'});
+    await sb.from('activity_log').insert({action:'incident_created',entity:'incidents',details:{title,severity}});
+    await loadData();render();
+    document.getElementById('fIncTitle').value='';document.getElementById('fIncDesc').value='';
+  }catch(err){alert('Error: '+err.message);}
+}
+async function resolveIncident(id){
+  await sb.from('incidents').update({status:'resuelta',resolved_at:new Date().toISOString()}).eq('id',id);
+  await loadData();render();
+}
+async function delIncident(id){if(!confirm('¿Eliminar incidencia?'))return;await sb.from('incidents').delete().eq('id',id);await loadData();render();}
+function filterIncidents(q){q=q.toLowerCase();renderIncidents(incidents.filter(i=>(i.title||'').toLowerCase().includes(q)));}
+function filterIncStatus(s){renderIncidents(s?incidents.filter(i=>i.status===s):incidents);}
+
 async function clearAll(){if(!confirm('¿Borrar TODO?'))return;if(!confirm('¿Seguro? No se puede deshacer.'))return;
   await Promise.all([
     sb.from('payments').delete().neq('id','00000000-0000-0000-0000-000000000000'),

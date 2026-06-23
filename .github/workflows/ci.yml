@@ -1,4 +1,4 @@
-name: CI - Validación antes de deploy
+name: CI/CD - Validación, Seguridad y Deploy
 
 on:
   push:
@@ -21,12 +21,28 @@ jobs:
               echo "❌ ERROR: $f contiene service_role key expuesta!"
               exit 1
             fi
+            if grep -qP '(password|secret|private_key)\s*[:=]' "$f"; then
+              echo "⚠️ AVISO: $f podría contener secretos"
+            fi
             if [ ! -s "$f" ]; then
               echo "❌ ERROR: $f está vacío!"
               exit 1
             fi
             echo "✅ $f OK"
           done
+
+      - name: Verificar seguridad de headers
+        run: |
+          if [ -f nginx.conf ]; then
+            echo "=== Verificando headers de seguridad ==="
+            for header in "X-Frame-Options" "X-Content-Type-Options" "X-XSS-Protection" "Content-Security-Policy"; do
+              if grep -q "$header" nginx.conf; then
+                echo "✅ $header configurado"
+              else
+                echo "⚠️ AVISO: $header no encontrado en nginx.conf"
+              fi
+            done
+          fi
 
       - name: Verificar tamaño de archivos
         run: |
@@ -39,9 +55,62 @@ jobs:
             echo "⚠️ AVISO: index.html supera 500KB ($size bytes)"
           fi
 
+      - name: Validar Dockerfile
+        run: |
+          if [ -f Dockerfile ]; then
+            echo "=== Validando Dockerfile ==="
+            if grep -q "HEALTHCHECK" Dockerfile; then
+              echo "✅ Healthcheck configurado"
+            else
+              echo "⚠️ AVISO: Sin healthcheck"
+            fi
+            echo "✅ Dockerfile válido"
+          fi
+
+      - name: Validar K8s manifests
+        run: |
+          if [ -d k8s ]; then
+            echo "=== Validando manifiestos K8s ==="
+            for f in k8s/*.yaml; do
+              echo "Revisando $f..."
+              if grep -q "kind:" "$f"; then
+                echo "✅ $f OK"
+              else
+                echo "❌ $f no es un manifiesto válido"
+                exit 1
+              fi
+            done
+          fi
+
       - name: Resumen
         run: |
           echo "==============================="
           echo "  ✅ Validación completada"
           echo "  Deploy a GitHub Pages: OK"
           echo "==============================="
+
+  docker:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}

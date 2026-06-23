@@ -1,0 +1,7 @@
+.git
+.github
+*.md
+.nojekyll
+CNAME
+.dockerignore
+k8s/
