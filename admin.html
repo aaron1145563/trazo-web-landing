@@ -106,12 +106,12 @@ td{padding:12px 14px;border-top:1px solid var(--line)}
       <input type="tel" id="loginPhone" placeholder="5512345678" onkeydown="if(event.key==='Enter')clientLogin()"/>
     </div>
     <div class="gate-field">
-      <label>PIN de acceso</label>
+      <label>Clave de acceso</label>
       <input type="password" id="loginPin" maxlength="6" placeholder="····" onkeydown="if(event.key==='Enter')clientLogin()"/>
     </div>
     <button class="gate-go" onclick="clientLogin()">Ver mi sitio</button>
     <div class="gate-err" id="loginErr">Datos incorrectos. Contacta a soporte.</div>
-    <p style="font-size:11px;color:var(--gray);margin-top:16px">¿No tienes tu PIN? Escríbenos por WhatsApp.</p>
+    <p style="font-size:11px;color:var(--gray);margin-top:16px">¿No tienes tu clave? Escríbenos por WhatsApp.</p>
   </div>
 </div>
 
@@ -152,10 +152,17 @@ async function clientLogin(){
   const phone=document.getElementById('loginPhone').value.trim().replace(/\D/g,'');
   const pin=document.getElementById('loginPin').value.trim();
   try{
-    const {data:clients}=await sb.from('clients').select('*');
+    const [{data:clients},{data:orders}]=await Promise.all([
+      sb.from('clients').select('*'),
+      sb.from('orders').select('phone,code')
+    ]);
     const client=(clients||[]).find(c=>{
       const cp=(c.phone||'').replace(/\D/g,'');
-      return (cp===phone||cp==='52'+phone||'52'+cp===phone)&&(c.pin||'1234')===pin;
+      const phoneMatch=cp===phone||cp==='52'+phone||'52'+cp===phone;
+      if(!phoneMatch)return false;
+      if((c.pin||'1234')===pin)return true;
+      const orderCode=(orders||[]).find(o=>(o.phone||'').replace(/\D/g,'')===cp&&o.code===pin);
+      return !!orderCode;
     });
     if(client){
       currentClient=client;
