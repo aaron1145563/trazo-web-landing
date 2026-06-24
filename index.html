@@ -3,31 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trazo Web Studio — Tu sitio web profesional en renta mensual</title>
-  <meta name="description" content="Sitios web profesionales para negocios locales. Sin inversión grande, sin complicaciones técnicas. Desde $350 MXN/mes con hosting y mantenimiento incluido.">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Trazo Web Studio — Sitios web profesionales en renta mensual</title>
+  <meta name="description" content="Sitios web profesionales para negocios locales. Sin inversi&oacute;n grande, sin complicaciones. Desde $350 MXN/mes con hosting y mantenimiento incluido.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: '#1F4E79',
-            'brand-light': '#85B7EB',
-            'brand-bg': '#F7F6F3',
-            'brand-dark': '#1A1A18',
-            'brand-gray': '#888780',
-            'brand-warm': '#E3E1D9',
-          },
-          fontFamily: {
-            serif: ['DM Serif Display', 'Georgia', 'serif'],
-            sans: ['Inter', 'Arial', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL='https://rqjsvehqdbgfzjsoqeto.supabase.co';
@@ -35,550 +14,674 @@
     const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   </script>
   <style>
-    html { scroll-behavior: smooth; }
-    .whatsapp-float {
-      animation: pulse-shadow 2s infinite;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#09090b;--bg-subtle:#18181b;--bg-muted:#27272a;
+      --surface:#fafafa;--surface-2:#f4f4f5;--surface-3:#e4e4e7;
+      --text:#fafafa;--text-muted:#a1a1aa;--text-subtle:#71717a;
+      --brand:#3b82f6;--brand-light:#60a5fa;--brand-dark:#2563eb;
+      --accent:#06b6d4;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
+      --radius:12px;--radius-lg:20px;--radius-xl:24px;
     }
-    @keyframes pulse-shadow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); }
-      50% { box-shadow: 0 0 0 12px rgba(37,211,102,0); }
-    }
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    button{font-family:inherit;cursor:pointer;border:none}
+    img{max-width:100%}
+
+    /* UTILITIES */
+    .container{max-width:1200px;margin:0 auto;padding:0 24px}
+    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+    /* NAV */
+    .nav{position:fixed;top:0;width:100%;z-index:100;padding:0 24px}
+    .nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav-blur{position:absolute;inset:0;background:rgba(9,9,11,.8);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%)}
+    .nav-inner>*{position:relative;z-index:1}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.02em}
+    .nav-logo span{color:var(--text-muted);font-weight:400;font-size:13px}
+    .nav-links{display:flex;align-items:center;gap:32px}
+    .nav-link{font-size:13px;color:var(--text-muted);font-weight:500;transition:color .2s}
+    .nav-link:hover{color:var(--text)}
+    .nav-cta{font-size:13px;font-weight:600;color:#fff;background:var(--brand);padding:8px 20px;border-radius:8px;transition:all .2s;box-shadow:0 0 0 1px rgba(59,130,246,.5),0 1px 2px rgba(0,0,0,.2)}
+    .nav-cta:hover{background:var(--brand-light);transform:translateY(-1px);box-shadow:0 0 0 1px rgba(96,165,250,.5),0 4px 12px rgba(59,130,246,.3)}
+    @media(max-width:768px){.nav-links .nav-link{display:none}}
+
+    /* HERO */
+    .hero{position:relative;padding:160px 24px 120px;text-align:center;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(59,130,246,.12) 0%,rgba(6,182,212,.06) 40%,transparent 70%);pointer-events:none}
+    .hero::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:13px;color:var(--text-muted);font-weight:500;margin-bottom:32px;backdrop-filter:blur(8px)}
+    .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.6);animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .hero h1{font-size:clamp(40px,7vw,80px);font-weight:800;letter-spacing:-.04em;line-height:1.05;max-width:800px;margin:0 auto}
+    .hero h1 .gradient{background:linear-gradient(135deg,var(--brand-light) 0%,var(--accent) 50%,var(--brand-light) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradient-shift 4s ease infinite}
+    @keyframes gradient-shift{0%,100%{background-position:0% center}50%{background-position:100% center}}
+    .hero-sub{margin-top:24px;font-size:18px;color:var(--text-muted);max-width:560px;margin-left:auto;margin-right:auto;line-height:1.7;font-weight:400}
+    .hero-actions{margin-top:40px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:#fff;color:#000;font-weight:700;font-size:15px;border-radius:10px;transition:all .25s;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,.15)}
+    .btn-primary svg{width:18px;height:18px;transition:transform .2s}
+    .btn-primary:hover svg{transform:translateX(3px)}
+    .btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border:1px solid rgba(255,255,255,.12);color:var(--text-muted);font-weight:600;font-size:15px;border-radius:10px;transition:all .25s;background:rgba(255,255,255,.02)}
+    .btn-ghost:hover{border-color:rgba(255,255,255,.25);color:#fff;background:rgba(255,255,255,.05)}
+    .hero-trust{margin-top:64px;display:flex;flex-wrap:wrap;justify-content:center;gap:32px}
+    .hero-trust-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-subtle);font-weight:500}
+    .hero-trust-item svg{width:16px;height:16px;opacity:.5}
+
+    /* GRID LINES (background decoration) */
+    .grid-lines{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .grid-lines::before{content:'';position:absolute;top:0;left:50%;width:1px;height:100%;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.04) 30%,rgba(255,255,255,.04) 70%,transparent)}
+    .grid-lines::after{content:'';position:absolute;top:50%;left:0;width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.04) 20%,rgba(255,255,255,.04) 80%,transparent)}
+
+    /* STATS */
+    .stats-section{padding:0 24px;position:relative;z-index:2;margin-top:-40px}
+    .stats-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);background:var(--bg-subtle);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-lg);overflow:hidden}
+    .stat-item{padding:32px;text-align:center;position:relative}
+    .stat-item:not(:last-child)::after{content:'';position:absolute;right:0;top:20%;height:60%;width:1px;background:rgba(255,255,255,.06)}
+    .stat-number{font-size:36px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .stat-label{font-size:12px;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-top:4px}
+    @media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-item:nth-child(2)::after{display:none}}
+
+    /* SECTIONS (Light) */
+    .section-light{background:var(--surface);color:#09090b;padding:120px 24px}
+    .section-dark{background:var(--bg);padding:120px 24px;position:relative}
+    .section-muted{background:var(--bg-subtle);padding:120px 24px;position:relative}
+    .section-tag{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;margin-bottom:16px}
+    .section-tag.blue{color:var(--brand)}
+    .section-tag.dark{color:var(--text-subtle)}
+    .section-title{font-size:clamp(32px,4.5vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+    .section-title.light{color:#09090b}
+    .section-title.dark{color:#fff}
+    .section-sub{font-size:17px;margin-top:16px;max-width:520px;line-height:1.7;font-weight:400}
+    .section-sub.light{color:#71717a}
+    .section-sub.dark{color:var(--text-muted)}
+    .section-header{text-align:center;max-width:680px;margin:0 auto 64px}
+
+    /* PROBLEM CARDS */
+    .problem-grid{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .problem-card{padding:32px;border-radius:var(--radius-lg);border:1px solid #e4e4e7;background:#fff;transition:all .3s ease}
+    .problem-card:hover{border-color:#d4d4d8;box-shadow:0 8px 32px rgba(0,0,0,.06);transform:translateY(-2px)}
+    .problem-card .emoji{font-size:24px;margin-bottom:16px;display:block}
+    .problem-card p{font-size:15px;font-weight:600;color:#09090b;line-height:1.5}
+    .problem-card .note{font-size:13px;color:#71717a;margin-top:8px;font-weight:400}
+    @media(max-width:640px){.problem-grid{grid-template-columns:1fr}}
+
+    /* STEPS */
+    .steps{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+    .steps::before{content:'';position:absolute;top:32px;left:calc(12.5% + 24px);right:calc(12.5% + 24px);height:2px;background:linear-gradient(90deg,var(--brand),var(--accent),var(--green));border-radius:2px;opacity:.3}
+    .step{text-align:center;padding:0 20px;position:relative}
+    .step-num{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-weight:800;font-size:20px;color:#fff;position:relative;z-index:1;transition:transform .3s}
+    .step:hover .step-num{transform:scale(1.08)}
+    .step-num.blue{background:linear-gradient(135deg,var(--brand),var(--brand-dark));box-shadow:0 4px 20px rgba(59,130,246,.3)}
+    .step-num.green{background:linear-gradient(135deg,var(--green),#16a34a);box-shadow:0 4px 20px rgba(34,197,94,.3)}
+    .step h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
+    .step p{font-size:13px;color:var(--text-muted);line-height:1.6}
+    @media(max-width:640px){.steps{grid-template-columns:repeat(2,1fr);gap:40px}.steps::before{display:none}}
+
+    /* FEATURES */
+    .features-grid{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-xl);overflow:hidden}
+    .feature-card{padding:40px 32px;background:var(--bg-subtle);transition:background .3s}
+    .feature-card:hover{background:var(--bg-muted)}
+    .feature-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+    .feature-icon svg{width:22px;height:22px}
+    .feature-icon.blue{background:rgba(59,130,246,.1);color:var(--brand-light)}
+    .feature-icon.green{background:rgba(34,197,94,.1);color:var(--green)}
+    .feature-icon.purple{background:rgba(139,92,246,.1);color:#a78bfa}
+    .feature-icon.cyan{background:rgba(6,182,212,.1);color:var(--accent)}
+    .feature-icon.amber{background:rgba(245,158,11,.1);color:var(--amber)}
+    .feature-icon.rose{background:rgba(244,63,94,.1);color:#fb7185}
+    .feature-card h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
+    .feature-card p{font-size:13px;color:var(--text-muted);line-height:1.6}
+    @media(max-width:768px){.features-grid{grid-template-columns:1fr}}
+
+    /* PRICING */
+    .pricing-grid{max-width:1060px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+    .price-card{border-radius:var(--radius-xl);padding:40px 32px;display:flex;flex-direction:column;border:1px solid #e4e4e7;background:#fff;transition:all .35s}
+    .price-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.08)}
+    .price-card.featured{border:2px solid var(--brand);position:relative;box-shadow:0 0 0 1px rgba(59,130,246,.15),0 8px 40px rgba(59,130,246,.1)}
+    .price-card.featured::before{content:'Mas popular';position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--brand),var(--accent));color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 20px;border-radius:100px}
+    .price-tag{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#71717a}
+    .price-desc{font-size:14px;color:#a1a1aa;margin-top:4px}
+    .price-amount{margin-top:24px}
+    .price-amount strong{font-size:48px;font-weight:900;letter-spacing:-.03em;color:#09090b}
+    .price-amount span{font-size:15px;color:#71717a;font-weight:500}
+    .price-setup{font-size:12px;color:#a1a1aa;margin-top:4px}
+    .price-features{margin-top:32px;display:flex;flex-direction:column;gap:12px;flex:1}
+    .price-feat{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#3f3f46}
+    .price-feat svg{width:18px;height:18px;color:var(--green);flex-shrink:0;margin-top:1px}
+    .price-btn{margin-top:32px;display:block;text-align:center;padding:14px;border-radius:10px;font-weight:700;font-size:14px;transition:all .25s}
+    .price-btn.outline{border:2px solid #e4e4e7;color:#09090b;background:#fff}
+    .price-btn.outline:hover{border-color:#d4d4d8;background:#f4f4f5}
+    .price-btn.solid{border:none;background:var(--brand);color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1),0 0 0 1px rgba(59,130,246,.5)}
+    .price-btn.solid:hover{background:var(--brand-light);transform:translateY(-1px);box-shadow:0 4px 16px rgba(59,130,246,.3)}
+    @media(max-width:768px){.pricing-grid{grid-template-columns:1fr;max-width:420px}}
+
+    /* FAQ */
+    .faq-list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+    .faq-item{border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;background:var(--bg-subtle)}
+    .faq-item[open]{background:var(--bg-muted)}
+    .faq-item summary{padding:20px 24px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center;list-style:none;transition:color .2s}
+    .faq-item summary:hover{color:var(--brand-light)}
+    .faq-item summary::-webkit-details-marker{display:none}
+    .faq-item summary svg{width:20px;height:20px;color:var(--text-subtle);transition:transform .3s;flex-shrink:0}
+    .faq-item[open] summary svg{transform:rotate(180deg)}
+    .faq-item .faq-body{padding:0 24px 20px;font-size:14px;color:var(--text-muted);line-height:1.7}
+
+    /* INDUSTRIES */
+    .industries{max-width:800px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .ind-card{padding:28px 16px;text-align:center;border-radius:var(--radius);border:1px solid #e4e4e7;background:#fff;transition:all .3s}
+    .ind-card:hover{border-color:var(--brand);box-shadow:0 4px 16px rgba(59,130,246,.08);transform:translateY(-2px)}
+    .ind-card .emoji{font-size:28px;display:block;margin-bottom:10px}
+    .ind-card p{font-size:13px;font-weight:600;color:#09090b}
+    @media(max-width:640px){.industries{grid-template-columns:repeat(2,1fr)}}
+
+    /* FORM */
+    .form-section{padding:120px 24px;background:var(--surface)}
+    .form-wrap{max-width:640px;margin:0 auto}
+    .form-card{background:#fff;border:1px solid #e4e4e7;border-radius:var(--radius-xl);padding:40px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:500px){.form-row{grid-template-columns:1fr}}
+    .field{margin-bottom:20px}
+    .field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#71717a;margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;border:1.5px solid #e4e4e7;border-radius:10px;padding:12px 16px;font-size:14px;font-family:inherit;outline:none;transition:all .2s;background:#fff;color:#09090b}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+    .field textarea{resize:vertical;min-height:80px}
+    .plan-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+    .plan-option{position:relative}
+    .plan-option input{position:absolute;opacity:0;pointer-events:none}
+    .plan-option .plan-box{border:2px solid #e4e4e7;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
+    .plan-option input:checked+.plan-box{border-color:var(--brand);background:rgba(59,130,246,.04)}
+    .plan-option .plan-box:hover{border-color:#d4d4d8}
+    .plan-option .plan-name{font-size:14px;font-weight:700;color:#09090b}
+    .plan-option .plan-price{font-size:12px;color:#71717a;margin-top:2px}
+    .submit-btn{width:100%;padding:16px;background:#09090b;color:#fff;font-weight:700;font-size:15px;border-radius:12px;border:none;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px}
+    .submit-btn:hover{background:#27272a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.15)}
+    .submit-btn svg{width:18px;height:18px;transition:transform .2s}
+    .submit-btn:hover svg{transform:translateX(3px)}
+
+    /* SUCCESS */
+    .success-box{text-align:center;padding:60px 20px}
+    .success-icon{width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+    .success-icon svg{width:36px;height:36px;color:var(--green)}
+    .success-box h3{font-size:28px;font-weight:800;color:#09090b;letter-spacing:-.02em}
+    .success-code{font-size:48px;font-weight:900;font-family:'Inter',monospace;letter-spacing:.15em;color:var(--brand);margin:16px 0}
+
+    /* CTA FINAL */
+    .cta-final{padding:120px 24px;text-align:center;position:relative;overflow:hidden}
+    .cta-final::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);pointer-events:none}
+
+    /* FOOTER */
+    .footer{padding:40px 24px;border-top:1px solid rgba(255,255,255,.06)}
+    .footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .footer-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+    .footer-logo span{color:var(--text-subtle);font-weight:400;font-size:12px}
+    .footer-copy{font-size:12px;color:var(--text-subtle)}
+    .footer-links{display:flex;gap:16px}
+    .footer-links a{font-size:11px;color:rgba(255,255,255,.15);transition:color .2s}
+    .footer-links a:hover{color:var(--text-muted)}
+
+    /* WHATSAPP */
+    .wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;z-index:90;transition:all .3s;box-shadow:0 4px 16px rgba(37,211,102,.3)}
+    .wa-float:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(37,211,102,.4)}
+    .wa-float svg{width:28px;height:28px;fill:#fff}
+
+    /* ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-delay-1{transition-delay:.1s}
+    .reveal-delay-2{transition-delay:.2s}
+    .reveal-delay-3{transition-delay:.3s}
+    .reveal-delay-4{transition-delay:.4s}
+
+    .hero-enter h1{opacity:0;transform:translateY(30px);animation:hero-in .8s cubic-bezier(.16,1,.3,1) .2s forwards}
+    .hero-enter .hero-sub{opacity:0;transform:translateY(20px);animation:hero-in .8s cubic-bezier(.16,1,.3,1) .4s forwards}
+    .hero-enter .hero-actions{opacity:0;transform:translateY(20px);animation:hero-in .8s cubic-bezier(.16,1,.3,1) .55s forwards}
+    .hero-enter .hero-badge{opacity:0;transform:translateY(10px);animation:hero-in .6s cubic-bezier(.16,1,.3,1) .1s forwards}
+    .hero-enter .hero-trust{opacity:0;animation:fade-in .8s ease .7s forwards}
+    @keyframes hero-in{to{opacity:1;transform:translateY(0)}}
+    @keyframes fade-in{to{opacity:1}}
   </style>
 </head>
-<body class="bg-white font-sans text-brand-dark antialiased">
+<body>
 
-  <!-- NAV -->
-  <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm border-b border-brand-warm z-50">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <svg width="36" height="36" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
-          <path d="M20 15 L 70 15" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
-          <circle cx="75" cy="65" r="4.5" fill="#1F4E79"/>
-        </svg>
-        <div class="leading-tight">
-          <span class="font-serif text-brand text-lg">Trazo</span>
-          <span class="block text-[9px] tracking-[3px] text-brand-gray uppercase -mt-1">Web Studio</span>
-        </div>
-      </div>
-      <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
-         class="bg-brand text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-brand/90 transition hidden sm:inline-flex items-center gap-2">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-        Escr&iacute;benos
-      </a>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-blur"></div>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linecap="round"/>
+        <path d="M20 15 L 70 15" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="75" cy="65" r="5" fill="#3b82f6"/>
+      </svg>
+      Trazo <span>Web Studio</span>
+    </a>
+    <div class="nav-links">
+      <a href="#como-funciona" class="nav-link">Proceso</a>
+      <a href="#paquetes" class="nav-link">Paquetes</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#pedido" class="nav-cta">Solicitar sitio</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="pt-28 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6">
-    <div class="max-w-3xl mx-auto text-center">
-      <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand leading-tight">
-        Tu sitio web profesional,<br class="hidden sm:block"> sin inversi&oacute;n grande de entrada
-      </h1>
-      <p class="mt-6 text-lg sm:text-xl text-brand-dark/70 max-w-2xl mx-auto leading-relaxed">
-        Nosotros lo dise&ntilde;amos, lo publicamos y lo mantenemos cada mes. T&uacute; solo pagas una mensualidad fija y te olvidas de lo t&eacute;cnico.
-      </p>
-      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
-           class="bg-brand text-white font-semibold px-8 py-4 rounded-xl text-lg hover:bg-brand/90 transition inline-flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-          Quiero mi sitio web
-        </a>
-        <a href="#paquetes" class="border-2 border-brand text-brand font-semibold px-8 py-4 rounded-xl text-lg hover:bg-brand/5 transition text-center">
-          Ver paquetes
-        </a>
-      </div>
-      <p class="mt-6 text-sm text-brand-gray">Desde $350 MXN/mes &middot; Sin contratos anuales &middot; Cancela cuando quieras</p>
+<!-- HERO -->
+<section class="hero hero-enter">
+  <div class="grid-lines"></div>
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Desde $350 MXN/mes &middot; Sin contratos anuales
+  </div>
+  <h1>
+    Tu negocio merece<br>
+    <span class="gradient">verse profesional</span>
+  </h1>
+  <p class="hero-sub">
+    Dise&ntilde;amos, publicamos y mantenemos tu sitio web. T&uacute; solo pagas una mensualidad fija y te olvidas de lo t&eacute;cnico.
+  </p>
+  <div class="hero-actions">
+    <a href="#pedido" class="btn-primary">
+      Solicitar mi sitio
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    </a>
+    <a href="#paquetes" class="btn-ghost">Ver paquetes</a>
+  </div>
+  <div class="hero-trust">
+    <div class="hero-trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+      SSL incluido
     </div>
-  </section>
-
-  <!-- PROBLEMA -->
-  <section class="py-16 sm:py-24 bg-brand-bg px-4 sm:px-6">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
-        &iquest;Te suena familiar?
-      </h2>
-      <div class="mt-12 grid sm:grid-cols-2 gap-6">
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <p class="text-lg text-brand-dark/80 italic">&ldquo;No tengo p&aacute;gina, solo mi Instagram.&rdquo;</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <p class="text-lg text-brand-dark/80 italic">&ldquo;Me da pena cuando me piden mi p&aacute;gina y no tengo.&rdquo;</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <p class="text-lg text-brand-dark/80 italic">&ldquo;Lo intent&eacute; en Wix pero lo dej&eacute; a medias.&rdquo;</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <p class="text-lg text-brand-dark/80 italic">&ldquo;Ya me clavaron una vez con esto, no quiero que me pase otra vez.&rdquo;</p>
-        </div>
-      </div>
-      <p class="mt-10 text-center text-lg text-brand-dark/70 max-w-2xl mx-auto">
-        Si tu competencia se ve m&aacute;s seria en l&iacute;nea que t&uacute;, est&aacute;s perdiendo clientes sin darte cuenta. Un sitio web profesional no es un lujo &mdash; es lo m&iacute;nimo para que te tomen en serio.
-      </p>
+    <div class="hero-trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+      100% responsivo
     </div>
-  </section>
-
-  <!-- COMO FUNCIONA -->
-  <section class="py-16 sm:py-24 px-4 sm:px-6">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
-        As&iacute; de f&aacute;cil funciona
-      </h2>
-      <p class="mt-4 text-center text-brand-dark/60 text-lg">Sin que tengas que aprender nada t&eacute;cnico</p>
-      <div class="mt-12 grid sm:grid-cols-4 gap-8">
-        <div class="text-center">
-          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
-            <span class="text-brand font-bold text-xl">1</span>
-          </div>
-          <h3 class="mt-4 font-semibold text-brand-dark">Plat&iacute;canos tu negocio</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Nos cuentas qu&eacute; haces, a qui&eacute;n le vendes y qu&eacute; quieres mostrar.</p>
-        </div>
-        <div class="text-center">
-          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
-            <span class="text-brand font-bold text-xl">2</span>
-          </div>
-          <h3 class="mt-4 font-semibold text-brand-dark">Nosotros dise&ntilde;amos</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Creamos tu sitio con tu marca, tus colores y tu contenido.</p>
-        </div>
-        <div class="text-center">
-          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
-            <span class="text-brand font-bold text-xl">3</span>
-          </div>
-          <h3 class="mt-4 font-semibold text-brand-dark">T&uacute; lo revisas</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Te mostramos el resultado y hacemos los ajustes que pidas.</p>
-        </div>
-        <div class="text-center">
-          <div class="w-14 h-14 bg-brand/10 rounded-full flex items-center justify-center mx-auto">
-            <span class="text-brand font-bold text-xl">4</span>
-          </div>
-          <h3 class="mt-4 font-semibold text-brand-dark">Listo, en l&iacute;nea</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Tu sitio se publica y nosotros lo mantenemos cada mes.</p>
-        </div>
-      </div>
+    <div class="hero-trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
+      Soporte WhatsApp
     </div>
-  </section>
-
-  <!-- QUE INCLUYE -->
-  <section class="py-16 sm:py-24 bg-brand-bg px-4 sm:px-6">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
-        Todo esto incluye tu renta mensual
-      </h2>
-      <p class="mt-4 text-center text-brand-dark/60 text-lg">T&uacute; no te preocupas de nada, nosotros nos encargamos</p>
-      <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <div class="text-brand text-2xl mb-3">&#9998;</div>
-          <h3 class="font-semibold text-brand-dark">Dise&ntilde;o profesional</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Adaptado a tu marca, no una plantilla gen&eacute;rica que se ve igual a miles de sitios.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <div class="text-brand text-2xl mb-3">&#128274;</div>
-          <h3 class="font-semibold text-brand-dark">Hosting y seguridad</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">El lugar donde vive tu p&aacute;gina, con el candadito de seguridad incluido.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <div class="text-brand text-2xl mb-3">&#128260;</div>
-          <h3 class="font-semibold text-brand-dark">Cambios de contenido</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Necesitas actualizar precios, fotos o textos? Nos escribes y listo.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <div class="text-brand text-2xl mb-3">&#128241;</div>
-          <h3 class="font-semibold text-brand-dark">Se ve bien en celular</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Tu sitio se adapta a cualquier pantalla: celular, tablet o computadora.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <div class="text-brand text-2xl mb-3">&#128172;</div>
-          <h3 class="font-semibold text-brand-dark">Soporte por WhatsApp</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Hablas con una persona real, no con un formulario o un call center.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <div class="text-brand text-2xl mb-3">&#128190;</div>
-          <h3 class="font-semibold text-brand-dark">Respaldos mensuales</h3>
-          <p class="mt-2 text-sm text-brand-dark/60">Tu informaci&oacute;n siempre protegida con copias de seguridad.</p>
-        </div>
-      </div>
+    <div class="hero-trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+      Cancela cuando quieras
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- PAQUETES -->
-  <section id="paquetes" class="py-16 sm:py-24 px-4 sm:px-6">
-    <div class="max-w-5xl mx-auto">
-      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
-        Elige tu paquete
-      </h2>
-      <p class="mt-4 text-center text-brand-dark/60 text-lg">Empieza con poco, crece cuando quieras</p>
-      <div class="mt-12 grid lg:grid-cols-3 gap-6">
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-grid reveal">
+    <div class="stat-item"><div class="stat-number" data-count="48">0</div><div class="stat-label">Horas promedio</div></div>
+    <div class="stat-item"><div class="stat-number" data-count="99.9">0</div><div class="stat-label">% Uptime</div></div>
+    <div class="stat-item"><div class="stat-number" data-count="350">0</div><div class="stat-label">Desde MXN/mes</div></div>
+    <div class="stat-item"><div class="stat-number" data-count="24">0</div><div class="stat-label">Hrs soporte</div></div>
+  </div>
+</div>
 
-        <!-- BASICO -->
-        <div class="rounded-2xl border border-brand-warm p-8 flex flex-col">
-          <h3 class="font-semibold text-lg text-brand-dark">B&aacute;sico</h3>
-          <p class="text-sm text-brand-dark/60 mt-1">Para empezar con lo esencial</p>
-          <div class="mt-6">
-            <span class="text-4xl font-bold text-brand">$350</span>
-            <span class="text-brand-dark/60"> MXN/mes</span>
-          </div>
-          <p class="text-sm text-brand-dark/50 mt-1">Setup inicial: $800 MXN (pago &uacute;nico)</p>
-          <ul class="mt-6 space-y-3 flex-1">
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Hasta 3 p&aacute;ginas
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Plantilla personalizada a tu marca
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              2 cambios de contenido al mes
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Formulario de contacto
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Listo en 3-5 d&iacute;as
-            </li>
-          </ul>
-          <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20el%20paquete%20B%C3%A1sico"
-             class="mt-8 block text-center border-2 border-brand text-brand font-semibold py-3 rounded-xl hover:bg-brand/5 transition">
-            Quiero este paquete
-          </a>
-        </div>
-
-        <!-- PROFESIONAL -->
-        <div class="rounded-2xl border-2 border-brand p-8 flex flex-col relative bg-brand/[0.02]">
-          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-semibold px-4 py-1 rounded-full">
-            M&aacute;s popular
-          </div>
-          <h3 class="font-semibold text-lg text-brand-dark">Profesional</h3>
-          <p class="text-sm text-brand-dark/60 mt-1">Para negocios que quieren verse en serio</p>
-          <div class="mt-6">
-            <span class="text-4xl font-bold text-brand">$600</span>
-            <span class="text-brand-dark/60"> MXN/mes</span>
-          </div>
-          <p class="text-sm text-brand-dark/50 mt-1">Setup inicial: $1,500 MXN (pago &uacute;nico)</p>
-          <ul class="mt-6 space-y-3 flex-1">
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Hasta 6 p&aacute;ginas
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Plantilla + ajustes a medida
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              4 cambios de contenido al mes
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              SEO b&aacute;sico incluido
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Cat&aacute;logo simple de productos
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Listo en 7-10 d&iacute;as
-            </li>
-          </ul>
-          <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20el%20paquete%20Profesional"
-             class="mt-8 block text-center bg-brand text-white font-semibold py-3 rounded-xl hover:bg-brand/90 transition">
-            Quiero este paquete
-          </a>
-        </div>
-
-        <!-- PREMIUM -->
-        <div class="rounded-2xl border border-brand-warm p-8 flex flex-col">
-          <h3 class="font-semibold text-lg text-brand-dark">Premium</h3>
-          <p class="text-sm text-brand-dark/60 mt-1">Para quienes quieren lo mejor</p>
-          <div class="mt-6">
-            <span class="text-4xl font-bold text-brand">$950</span>
-            <span class="text-brand-dark/60"> MXN/mes</span>
-          </div>
-          <p class="text-sm text-brand-dark/50 mt-1">Setup inicial: $2,500 MXN (pago &uacute;nico)</p>
-          <ul class="mt-6 space-y-3 flex-1">
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Hasta 10 p&aacute;ginas
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Dise&ntilde;o completamente a medida
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Cambios ilimitados (menores)
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              SEO + reporte mensual
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Cat&aacute;logo + carrito de compras
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Integraci&oacute;n directa con WhatsApp
-            </li>
-            <li class="flex items-start gap-2 text-sm text-brand-dark/70">
-              <svg class="w-5 h-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Listo en 10-15 d&iacute;as
-            </li>
-          </ul>
-          <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20el%20paquete%20Premium"
-             class="mt-8 block text-center border-2 border-brand text-brand font-semibold py-3 rounded-xl hover:bg-brand/5 transition">
-            Quiero este paquete
-          </a>
-        </div>
-
-      </div>
-      <p class="mt-8 text-center text-sm text-brand-dark/50">
-        Todos los paquetes incluyen hosting, seguridad, respaldos y soporte por WhatsApp. No incluyen dominio (~$300 MXN/a&ntilde;o, registrado a tu nombre).
-      </p>
+<!-- PROBLEMA -->
+<section class="section-light" style="padding-top:100px">
+  <div class="section-header">
+    <div class="section-tag blue">El problema</div>
+    <h2 class="section-title light">&iquest;Tu competencia se ve m&aacute;s seria que t&uacute; en internet?</h2>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card reveal">
+      <span class="emoji">&#128683;</span>
+      <p>&ldquo;No tengo p&aacute;gina, solo mi Instagram.&rdquo;</p>
+      <div class="note">El 70% de los clientes buscan tu negocio en Google antes de visitarlo.</div>
     </div>
-  </section>
-
-  <!-- REGLAS CLARAS -->
-  <section class="py-16 sm:py-24 bg-brand-bg px-4 sm:px-6">
-    <div class="max-w-3xl mx-auto">
-      <h2 class="font-serif text-3xl sm:text-4xl text-brand text-center">
-        Reglas claras desde el d&iacute;a uno
-      </h2>
-      <p class="mt-4 text-center text-brand-dark/60 text-lg">Todo por escrito, para tu tranquilidad</p>
-      <div class="mt-12 space-y-6">
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <h3 class="font-semibold text-brand-dark">&iquest;Qu&eacute; pasa si dejo de pagar?</h3>
-          <p class="mt-2 text-brand-dark/70">El sitio se pausa hasta que regularices. No pierdes tu contenido ni tu dise&ntilde;o. Todo queda explicado desde el primer d&iacute;a, sin sorpresas.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <h3 class="font-semibold text-brand-dark">&iquest;Puedo cancelar cuando quiera?</h3>
-          <p class="mt-2 text-brand-dark/70">S&iacute;. Con 15 d&iacute;as de aviso, sin penalizaci&oacute;n. No te pedimos compromiso de un a&ntilde;o ni te atamos con letra chiquita.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <h3 class="font-semibold text-brand-dark">&iquest;Puedo ser due&ntilde;o del sitio?</h3>
-          <p class="mt-2 text-brand-dark/70">Claro. En cualquier momento puedes ejercer la opci&oacute;n de compra (desde $6,000 MXN) y el sitio pasa a ser completamente tuyo.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 border border-brand-warm">
-          <h3 class="font-semibold text-brand-dark">&iquest;C&oacute;mo s&eacute; que no van a desaparecer?</h3>
-          <p class="mt-2 text-brand-dark/70">Firmamos contrato por escrito desde el primer d&iacute;a. Ah&iacute; quedan las reglas claras de qu&eacute; pasa si algo no funciona, de tu lado o del nuestro.</p>
-        </div>
-      </div>
+    <div class="problem-card reveal reveal-delay-1">
+      <span class="emoji">&#128532;</span>
+      <p>&ldquo;Me da pena cuando me piden mi p&aacute;gina y no tengo.&rdquo;</p>
+      <div class="note">Un sitio profesional te da credibilidad instant&aacute;nea.</div>
     </div>
-  </section>
-
-  <!-- PARA QUIEN -->
-  <section class="py-16 sm:py-24 px-4 sm:px-6">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="font-serif text-3xl sm:text-4xl text-brand">
-        Hecho para negocios como el tuyo
-      </h2>
-      <div class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6">
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#127860;</div>
-          <p class="text-sm font-medium text-brand-dark">Restaurantes y cafeter&iacute;as</p>
-        </div>
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#128135;</div>
-          <p class="text-sm font-medium text-brand-dark">Salones de belleza</p>
-        </div>
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#129658;</div>
-          <p class="text-sm font-medium text-brand-dark">Consultorios y cl&iacute;nicas</p>
-        </div>
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#128188;</div>
-          <p class="text-sm font-medium text-brand-dark">Abogados y contadores</p>
-        </div>
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#128295;</div>
-          <p class="text-sm font-medium text-brand-dark">Talleres y servicios</p>
-        </div>
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#127891;</div>
-          <p class="text-sm font-medium text-brand-dark">Coaches y consultores</p>
-        </div>
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#128722;</div>
-          <p class="text-sm font-medium text-brand-dark">Tiendas locales</p>
-        </div>
-        <div class="bg-brand-bg rounded-xl p-5">
-          <div class="text-3xl mb-2">&#127968;</div>
-          <p class="text-sm font-medium text-brand-dark">Negocios de barrio</p>
-        </div>
-      </div>
+    <div class="problem-card reveal reveal-delay-2">
+      <span class="emoji">&#128169;</span>
+      <p>&ldquo;Lo intent&eacute; en Wix pero lo dej&eacute; a medias.&rdquo;</p>
+      <div class="note">Con nosotros no tienes que aprender nada t&eacute;cnico.</div>
     </div>
-  </section>
-
-  <!-- FORMULARIO DE PEDIDO -->
-  <section id="pedido" class="py-16 sm:py-24 px-4 sm:px-6 bg-white">
-    <div class="max-w-2xl mx-auto">
-      <div class="text-center mb-10">
-        <h2 class="font-serif text-3xl sm:text-4xl text-brand-dark">Solicita tu sitio web</h2>
-        <p class="mt-4 text-brand-gray">Llena el formulario y recibe tu clave de seguimiento al instante.</p>
-      </div>
-      <form id="orderForm" class="space-y-5">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs font-semibold text-brand-gray uppercase tracking-wider mb-1">Tu nombre *</label>
-            <input type="text" id="oName" required placeholder="Ej. María López"
-              class="w-full border border-brand-warm rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand"/>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-brand-gray uppercase tracking-wider mb-1">Nombre del negocio *</label>
-            <input type="text" id="oBiz" required placeholder="Ej. Salón Bella"
-              class="w-full border border-brand-warm rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand"/>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-brand-gray uppercase tracking-wider mb-1">WhatsApp *</label>
-            <input type="tel" id="oPhone" required placeholder="5512345678"
-              class="w-full border border-brand-warm rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand"/>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-brand-gray uppercase tracking-wider mb-1">Tipo de negocio</label>
-            <select id="oType"
-              class="w-full border border-brand-warm rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand bg-white">
-              <option value="">Selecciona...</option>
-              <option>Estética / Barbería</option>
-              <option>Consultorio médico</option>
-              <option>Restaurante / Cafetería</option>
-              <option>Gimnasio / Estudio</option>
-              <option>Taller mecánico</option>
-              <option>Tienda local</option>
-              <option>Profesionista independiente</option>
-              <option>Otro</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-brand-gray uppercase tracking-wider mb-1">¿Qué paquete te interesa? *</label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
-            <label class="relative cursor-pointer">
-              <input type="radio" name="oPlan" value="basico" class="peer sr-only" checked/>
-              <div class="border-2 border-brand-warm rounded-xl p-4 text-center peer-checked:border-brand peer-checked:bg-brand/5 transition">
-                <p class="font-bold text-brand-dark">Básico</p>
-                <p class="text-xs text-brand-gray mt-1">$350/mes</p>
-              </div>
-            </label>
-            <label class="relative cursor-pointer">
-              <input type="radio" name="oPlan" value="profesional" class="peer sr-only"/>
-              <div class="border-2 border-brand-warm rounded-xl p-4 text-center peer-checked:border-brand peer-checked:bg-brand/5 transition">
-                <p class="font-bold text-brand-dark">Profesional</p>
-                <p class="text-xs text-brand-gray mt-1">$600/mes</p>
-              </div>
-            </label>
-            <label class="relative cursor-pointer">
-              <input type="radio" name="oPlan" value="premium" class="peer sr-only"/>
-              <div class="border-2 border-brand-warm rounded-xl p-4 text-center peer-checked:border-brand peer-checked:bg-brand/5 transition">
-                <p class="font-bold text-brand-dark">Premium</p>
-                <p class="text-xs text-brand-gray mt-1">$950/mes</p>
-              </div>
-            </label>
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-brand-gray uppercase tracking-wider mb-1">¿Algo que quieras contarnos?</label>
-          <textarea id="oNotes" rows="3" placeholder="Cuéntanos sobre tu negocio, qué necesitas, dudas..."
-            class="w-full border border-brand-warm rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand resize-vertical"></textarea>
-        </div>
-        <button type="submit"
-          class="w-full bg-brand text-white font-bold py-4 rounded-xl text-lg hover:bg-brand/90 transition flex items-center justify-center gap-2">
-          Enviar solicitud
-        </button>
-        <p class="text-center text-xs text-brand-gray">Te respondemos en menos de 24 horas</p>
-      </form>
-      <div id="orderSuccess" class="hidden text-center py-10">
-        <div class="text-5xl mb-4">&#9989;</div>
-        <h3 class="font-serif text-2xl text-brand-dark">¡Solicitud enviada!</h3>
-        <p class="mt-2 text-brand-gray">Tu clave de seguimiento es:</p>
-        <p id="orderCode" class="mt-3 text-4xl font-mono font-bold text-brand tracking-widest"></p>
-        <p class="mt-3 text-sm text-brand-gray">Guarda esta clave. Te contactaremos por WhatsApp pronto.</p>
-        <button onclick="document.getElementById('orderSuccess').classList.add('hidden');document.getElementById('orderForm').classList.remove('hidden')"
-          class="mt-6 text-brand font-semibold underline">Enviar otra solicitud</button>
-      </div>
+    <div class="problem-card reveal reveal-delay-3">
+      <span class="emoji">&#128176;</span>
+      <p>&ldquo;Ya me clavaron una vez con esto.&rdquo;</p>
+      <div class="note">Contrato claro, sin letra chiquita. Cancela cuando quieras.</div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <script>
-  function genCode(){return String(Math.floor(100000+Math.random()*900000));}
+<!-- COMO FUNCIONA -->
+<section id="como-funciona" class="section-dark">
+  <div class="section-header">
+    <div class="section-tag dark">Proceso</div>
+    <h2 class="section-title dark">4 pasos y tu sitio est&aacute; en l&iacute;nea</h2>
+    <p class="section-sub dark">Sin que tengas que aprender nada t&eacute;cnico</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num blue">1</div>
+      <h3>Plat&iacute;canos</h3>
+      <p>Cu&eacute;ntanos qu&eacute; hace tu negocio y qu&eacute; quieres mostrar.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num blue">2</div>
+      <h3>Dise&ntilde;amos</h3>
+      <p>Creamos tu sitio con tu marca, colores y contenido.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num blue">3</div>
+      <h3>T&uacute; revisas</h3>
+      <p>Te mostramos el resultado y ajustamos lo que pidas.</p>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-num green">&#10003;</div>
+      <h3>En l&iacute;nea</h3>
+      <p>Tu sitio se publica y nosotros lo mantenemos.</p>
+    </div>
+  </div>
+</section>
 
-  document.getElementById('orderForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const name = document.getElementById('oName').value.trim();
-    const biz = document.getElementById('oBiz').value.trim();
-    const phone = document.getElementById('oPhone').value.trim();
-    const type = document.getElementById('oType').value;
-    const plan = document.querySelector('input[name="oPlan"]:checked').value;
-    const notes = document.getElementById('oNotes').value.trim();
+<!-- FEATURES -->
+<section class="section-muted">
+  <div class="section-header">
+    <div class="section-tag dark">Todo incluido</div>
+    <h2 class="section-title dark">T&uacute; no te preocupas de nada</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon blue"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/></svg></div>
+      <h3>Dise&ntilde;o a tu medida</h3>
+      <p>Adaptado a tu marca, no una plantilla gen&eacute;rica.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon green"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg></div>
+      <h3>Hosting y seguridad</h3>
+      <p>Tu p&aacute;gina siempre en l&iacute;nea, con SSL incluido.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon purple"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg></div>
+      <h3>Cambios ilimitados</h3>
+      <p>Actualiza precios, fotos o textos cuando quieras.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon cyan"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg></div>
+      <h3>100% Responsivo</h3>
+      <p>Se ve perfecto en celular, tablet y computadora.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon rose"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></div>
+      <h3>Soporte por WhatsApp</h3>
+      <p>Hablas con una persona real, no con un bot.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon amber"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg></div>
+      <h3>Respaldos autom&aacute;ticos</h3>
+      <p>Tu informaci&oacute;n siempre protegida y segura.</p>
+    </div>
+  </div>
+</section>
 
-    // Generate unique 6-digit code (retry if duplicate)
-    let code, inserted = false;
-    for(let i=0;i<5;i++){
-      code = genCode();
-      const {error} = await sb.from('orders').insert({name,business:biz,phone,type,plan,notes,status:'nuevo',code});
-      if(!error){inserted=true;break;}
+<!-- PAQUETES -->
+<section id="paquetes" class="section-light">
+  <div class="section-header">
+    <div class="section-tag blue">Paquetes</div>
+    <h2 class="section-title light">Empieza con poco, crece cuando quieras</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-tag">B&aacute;sico</div>
+      <div class="price-desc">Para empezar con lo esencial</div>
+      <div class="price-amount"><strong>$350</strong> <span>/mes</span></div>
+      <div class="price-setup">Setup: $800 MXN (pago &uacute;nico)</div>
+      <div class="price-features">
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Hasta 3 p&aacute;ginas</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Dise&ntilde;o personalizado</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>2 cambios al mes</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Formulario de contacto</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Listo en 3-5 d&iacute;as</div>
+      </div>
+      <a href="#pedido" class="price-btn outline">Elegir B&aacute;sico</a>
+    </div>
+    <div class="price-card featured reveal reveal-delay-1">
+      <div class="price-tag" style="color:var(--brand)">Profesional</div>
+      <div class="price-desc">Para verse en serio</div>
+      <div class="price-amount"><strong>$600</strong> <span>/mes</span></div>
+      <div class="price-setup">Setup: $1,500 MXN (pago &uacute;nico)</div>
+      <div class="price-features">
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Hasta 6 p&aacute;ginas</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Dise&ntilde;o a medida</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>4 cambios al mes</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>SEO b&aacute;sico incluido</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Cat&aacute;logo de productos</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Listo en 7-10 d&iacute;as</div>
+      </div>
+      <a href="#pedido" class="price-btn solid">Elegir Profesional</a>
+    </div>
+    <div class="price-card reveal reveal-delay-2">
+      <div class="price-tag">Premium</div>
+      <div class="price-desc">Lo mejor para tu negocio</div>
+      <div class="price-amount"><strong>$950</strong> <span>/mes</span></div>
+      <div class="price-setup">Setup: $2,500 MXN (pago &uacute;nico)</div>
+      <div class="price-features">
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Hasta 10 p&aacute;ginas</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Dise&ntilde;o completamente custom</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Cambios ilimitados</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>SEO + reporte mensual</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Cat&aacute;logo + carrito</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Integraci&oacute;n WhatsApp</div>
+        <div class="price-feat"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Listo en 10-15 d&iacute;as</div>
+      </div>
+      <a href="#pedido" class="price-btn outline">Elegir Premium</a>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:13px;color:#71717a;margin-top:32px">Todos incluyen hosting, SSL, respaldos y soporte. No incluyen dominio (~$300 MXN/a&ntilde;o, a tu nombre).</p>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section-dark">
+  <div class="section-header">
+    <div class="section-tag dark">FAQ</div>
+    <h2 class="section-title dark">Reglas claras desde el d&iacute;a uno</h2>
+  </div>
+  <div class="faq-list">
+    <details class="faq-item reveal" open>
+      <summary>&iquest;Qu&eacute; pasa si dejo de pagar?<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></summary>
+      <div class="faq-body">El sitio se pausa hasta que regularices. No pierdes tu contenido ni tu dise&ntilde;o. Todo queda explicado desde el primer d&iacute;a, sin sorpresas.</div>
+    </details>
+    <details class="faq-item reveal reveal-delay-1">
+      <summary>&iquest;Puedo cancelar cuando quiera?<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></summary>
+      <div class="faq-body">S&iacute;. Con 15 d&iacute;as de aviso, sin penalizaci&oacute;n. Sin compromiso anual ni letra chiquita.</div>
+    </details>
+    <details class="faq-item reveal reveal-delay-2">
+      <summary>&iquest;Puedo ser due&ntilde;o del sitio?<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></summary>
+      <div class="faq-body">Claro. En cualquier momento puedes ejercer la opci&oacute;n de compra (desde $6,000 MXN) y el sitio pasa a ser tuyo.</div>
+    </details>
+    <details class="faq-item reveal reveal-delay-3">
+      <summary>&iquest;C&oacute;mo s&eacute; que no van a desaparecer?<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></summary>
+      <div class="faq-body">Firmamos contrato por escrito desde el primer d&iacute;a. Reglas claras de qu&eacute; pasa si algo no funciona, de tu lado o del nuestro.</div>
+    </details>
+  </div>
+</section>
+
+<!-- INDUSTRIAS -->
+<section class="section-light">
+  <div class="section-header">
+    <div class="section-tag blue">Industrias</div>
+    <h2 class="section-title light">Hecho para negocios como el tuyo</h2>
+  </div>
+  <div class="industries">
+    <div class="ind-card reveal"><span class="emoji">&#127860;</span><p>Restaurantes</p></div>
+    <div class="ind-card reveal reveal-delay-1"><span class="emoji">&#128135;</span><p>Salones</p></div>
+    <div class="ind-card reveal reveal-delay-2"><span class="emoji">&#129658;</span><p>Consultorios</p></div>
+    <div class="ind-card reveal reveal-delay-3"><span class="emoji">&#128188;</span><p>Profesionistas</p></div>
+    <div class="ind-card reveal"><span class="emoji">&#128295;</span><p>Talleres</p></div>
+    <div class="ind-card reveal reveal-delay-1"><span class="emoji">&#127891;</span><p>Coaches</p></div>
+    <div class="ind-card reveal reveal-delay-2"><span class="emoji">&#128722;</span><p>Tiendas</p></div>
+    <div class="ind-card reveal reveal-delay-3"><span class="emoji">&#127968;</span><p>Negocios locales</p></div>
+  </div>
+</section>
+
+<!-- FORMULARIO -->
+<section id="pedido" class="form-section">
+  <div class="form-wrap">
+    <div class="section-header">
+      <div class="section-tag blue">Empezar</div>
+      <h2 class="section-title light">Solicita tu sitio web</h2>
+      <p class="section-sub light">Llena el formulario y recibe tu clave de seguimiento al instante.</p>
+    </div>
+    <form id="orderForm" class="form-card">
+      <div class="form-row">
+        <div class="field"><label>Tu nombre *</label><input type="text" id="oName" required placeholder="Mar&iacute;a L&oacute;pez"/></div>
+        <div class="field"><label>Nombre del negocio *</label><input type="text" id="oBiz" required placeholder="Sal&oacute;n Bella"/></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>WhatsApp *</label><input type="tel" id="oPhone" required placeholder="5512345678"/></div>
+        <div class="field"><label>Tipo de negocio</label>
+          <select id="oType">
+            <option value="">Selecciona...</option>
+            <option>Est&eacute;tica / Barber&iacute;a</option>
+            <option>Consultorio m&eacute;dico</option>
+            <option>Restaurante / Cafeter&iacute;a</option>
+            <option>Gimnasio / Estudio</option>
+            <option>Taller mec&aacute;nico</option>
+            <option>Tienda local</option>
+            <option>Profesionista independiente</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#71717a;margin-bottom:8px">&iquest;Qu&eacute; paquete te interesa? *</label>
+      <div class="plan-selector">
+        <label class="plan-option">
+          <input type="radio" name="oPlan" value="basico" checked/>
+          <div class="plan-box"><div class="plan-name">B&aacute;sico</div><div class="plan-price">$350/mes</div></div>
+        </label>
+        <label class="plan-option">
+          <input type="radio" name="oPlan" value="profesional"/>
+          <div class="plan-box"><div class="plan-name">Profesional</div><div class="plan-price">$600/mes</div></div>
+        </label>
+        <label class="plan-option">
+          <input type="radio" name="oPlan" value="premium"/>
+          <div class="plan-box"><div class="plan-name">Premium</div><div class="plan-price">$950/mes</div></div>
+        </label>
+      </div>
+      <div class="field"><label>&iquest;Algo que quieras contarnos?</label><textarea id="oNotes" placeholder="Cu&eacute;ntanos sobre tu negocio..."></textarea></div>
+      <button type="submit" class="submit-btn">
+        Enviar solicitud
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+      </button>
+      <p style="text-align:center;font-size:12px;color:#a1a1aa;margin-top:12px">Te respondemos en menos de 24 horas</p>
+    </form>
+    <div id="orderSuccess" class="success-box" style="display:none">
+      <div class="success-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+      <h3>&iexcl;Solicitud enviada!</h3>
+      <p style="color:#71717a;margin-top:8px">Tu clave de seguimiento es:</p>
+      <div id="orderCode" class="success-code"></div>
+      <p style="font-size:13px;color:#a1a1aa">Guarda esta clave. Te contactaremos por WhatsApp pronto.</p>
+      <button onclick="document.getElementById('orderSuccess').style.display='none';document.getElementById('orderForm').style.display='block'" style="margin-top:24px;background:none;border:none;color:var(--brand);font-weight:600;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:4px">Enviar otra solicitud</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final section-dark">
+  <h2 class="section-title dark" style="max-width:600px;margin:0 auto">Tu negocio merece una presencia profesional</h2>
+  <p class="section-sub dark" style="text-align:center;margin:16px auto 0">Cu&eacute;ntanos de tu negocio y te decimos c&oacute;mo se ver&iacute;a tu sitio. Sin compromiso.</p>
+  <div style="margin-top:40px;text-align:center">
+    <a href="#pedido" class="btn-primary">
+      Quiero mi sitio web
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    </a>
+  </div>
+  <p style="text-align:center;font-size:13px;color:var(--text-subtle);margin-top:16px">Respondemos en menos de 24 horas</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <svg width="18" height="18" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linecap="round"/>
+        <path d="M20 15 L 70 15" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="75" cy="65" r="5" fill="#3b82f6"/>
+      </svg>
+      Trazo <span>Web Studio</span>
+    </div>
+    <div class="footer-copy">&copy; 2026 Trazo Web Studio. Todos los derechos reservados.</div>
+    <div class="footer-links">
+      <a href="admin.html">Administrador</a>
+      <a href="tw-master.html">Maestro</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio" class="wa-float" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+</a>
+
+<script>
+// Form submission
+function genCode(){return String(Math.floor(100000+Math.random()*900000));}
+document.getElementById('orderForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const name=document.getElementById('oName').value.trim();
+  const biz=document.getElementById('oBiz').value.trim();
+  const phone=document.getElementById('oPhone').value.trim();
+  const type=document.getElementById('oType').value;
+  const plan=document.querySelector('input[name="oPlan"]:checked').value;
+  const notes=document.getElementById('oNotes').value.trim();
+  const btn=this.querySelector('.submit-btn');
+  btn.textContent='Enviando...';btn.disabled=true;
+  let code,inserted=false;
+  for(let i=0;i<5;i++){
+    code=genCode();
+    const{error}=await sb.from('orders').insert({name,business:biz,phone,type,plan,notes,status:'nuevo',code});
+    if(!error){inserted=true;break;}
+  }
+  if(!inserted){alert('Error al enviar. Intenta de nuevo.');btn.textContent='Enviar solicitud';btn.disabled=false;return;}
+  await sb.from('activity_log').insert({action:'order_created',entity:'orders',details:{name,business:biz,plan,code}});
+  document.getElementById('orderCode').textContent=code;
+  this.style.display='none';
+  document.getElementById('orderSuccess').style.display='block';
+  this.reset();btn.textContent='Enviar solicitud';btn.disabled=false;
+});
+
+// Track visit
+sb.from('visits').insert({page:location.pathname,referrer:document.referrer,user_agent:navigator.userAgent});
+
+// Reveal on scroll
+const revealObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target);}});
+},{threshold:.15,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+// Animated counters
+const counterObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;
+    const target=parseFloat(el.dataset.count);
+    const isDecimal=String(target).includes('.');
+    const duration=1200;
+    const start=performance.now();
+    function tick(now){
+      const p=Math.min((now-start)/duration,1);
+      const ease=1-Math.pow(1-p,3);
+      const val=ease*target;
+      el.textContent=isDecimal?val.toFixed(1):Math.floor(val);
+      if(p<1)requestAnimationFrame(tick);
     }
-    if(!inserted){alert('Error al enviar. Intenta de nuevo.');return;}
-
-    await sb.from('activity_log').insert({action:'order_created',entity:'orders',details:{name,business:biz,plan,code}});
-
-    document.getElementById('orderCode').textContent = code;
-    this.classList.add('hidden');
-    document.getElementById('orderSuccess').classList.remove('hidden');
-    this.reset();
+    requestAnimationFrame(tick);
+    counterObs.unobserve(el);
   });
+},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>counterObs.observe(el));
 
-  // Track visit
-  sb.from('visits').insert({page:location.pathname,referrer:document.referrer,user_agent:navigator.userAgent});
-  </script>
-
-  <!-- CTA FINAL -->
-  <section class="py-16 sm:py-24 bg-brand px-4 sm:px-6">
-    <div class="max-w-3xl mx-auto text-center">
-      <h2 class="font-serif text-3xl sm:text-4xl text-white">
-        Para que ya no te d&eacute; pena tu p&aacute;gina
-      </h2>
-      <p class="mt-6 text-lg text-white/80 max-w-xl mx-auto">
-        Escr&iacute;benos por WhatsApp, cu&eacute;ntanos de tu negocio y te decimos c&oacute;mo se ver&iacute;a tu sitio. Sin compromiso, sin presi&oacute;n.
-      </p>
-      <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
-         class="mt-10 inline-flex items-center gap-2 bg-white text-brand font-bold px-10 py-4 rounded-xl text-lg hover:bg-white/95 transition">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-        Quiero mi sitio web
-      </a>
-      <p class="mt-4 text-sm text-white/60">Respondemos en menos de 24 horas</p>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="py-10 px-4 sm:px-6 border-t border-brand-warm">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <svg width="28" height="28" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 15 C 20 15, 22 60, 45 75 C 58 83, 70 78, 75 65" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
-          <path d="M20 15 L 70 15" fill="none" stroke="#1F4E79" stroke-width="6" stroke-linecap="round"/>
-          <circle cx="75" cy="65" r="4.5" fill="#1F4E79"/>
-        </svg>
-        <span class="font-serif text-brand">Trazo</span>
-        <span class="text-[8px] tracking-[2px] text-brand-gray uppercase">Web Studio</span>
-      </div>
-      <p class="text-sm text-brand-gray">&copy; 2026 Trazo Web Studio. Todos los derechos reservados.</p>
-      <div class="flex gap-4 mt-6">
-        <a href="admin.html" class="text-xs text-brand-gray/40 hover:text-brand-gray transition">Administrador</a>
-        <a href="tw-master.html" class="text-xs text-brand-gray/40 hover:text-brand-gray transition">Maestro</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- WHATSAPP FLOTANTE -->
-  <a href="https://wa.me/5215573046389?text=Hola%2C%20me%20interesa%20un%20sitio%20web%20para%20mi%20negocio"
-     class="whatsapp-float fixed bottom-6 right-6 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition z-50"
-     aria-label="Contactar por WhatsApp">
-    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.359 0-4.542-.808-6.272-2.164l-.438-.35-3.091 1.036 1.036-3.091-.35-.438A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-  </a>
-
+// Smooth nav background
+let lastScroll=0;
+window.addEventListener('scroll',()=>{
+  const nav=document.querySelector('.nav-inner');
+  if(window.scrollY>100)nav.style.borderBottomColor='rgba(255,255,255,.08)';
+  else nav.style.borderBottomColor='rgba(255,255,255,.04)';
+},{passive:true});
+</script>
 </body>
 </html>
