@@ -354,6 +354,7 @@ function renderOrders(list){
       <button class="row-btn ok" title="Convertir" onclick="convertOrder('${o.id}')">${svgOk}</button>
       <button class="row-btn blue" title="Contactado" onclick="markOrder('${o.id}','contactado')">${svgChat}</button>
       <button class="row-btn del" title="Rechazar" onclick="markOrder('${o.id}','rechazado')">${svgX}</button>
+      <button class="row-btn del" title="Borrar completamente" onclick="delOrder('${o.id}')" style="background:#7f1d1d">${svgDel}</button>
     </div></td></tr>`).join('');
 }
 
@@ -367,6 +368,11 @@ async function convertOrder(id){
 }
 async function markOrder(id,s){
   await sb.from('orders').update({status:s}).eq('id',id);
+  await loadData();render();
+}
+async function delOrder(id){
+  if(!confirm('¿Borrar este pedido completamente? No se puede deshacer.'))return;
+  await sb.from('orders').delete().eq('id',id);
   await loadData();render();
 }
 
