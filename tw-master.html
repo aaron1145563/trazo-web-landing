@@ -139,7 +139,7 @@ tr:hover td{background:#fafaf8}
       </select>
     </div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Cliente</th><th>Negocio</th><th>Tel</th><th>PIN</th><th>Paquete</th><th>Renta</th><th>Estado</th><th>Inicio</th><th></th></tr></thead>
+      <thead><tr><th>Cliente</th><th>Negocio</th><th>Tel</th><th>PIN</th><th>Paquete</th><th>Renta</th><th>Sitio web</th><th>Estado</th><th>Inicio</th><th></th></tr></thead>
       <tbody id="clientsBody"></tbody>
     </table></div>
   </div>
@@ -358,12 +358,26 @@ function renderOrders(list){
     </div></td></tr>`).join('');
 }
 
+const TEMPLATE_MAP={
+  'Estética / Barbería':'trazo-tpl-estetica',
+  'Consultorio médico':'trazo-tpl-consultorio',
+  'Restaurante / Cafetería':'trazo-tpl-restaurante',
+  'Gimnasio / Estudio':'trazo-tpl-gimnasio',
+  'Taller mecánico':'trazo-tpl-taller',
+  'Tienda local':'trazo-tpl-tienda',
+  'Profesionista independiente':'trazo-tpl-profesionista'
+};
+function assignTemplate(businessType){
+  const repo=TEMPLATE_MAP[businessType]||null;
+  return repo?{repo,url:`https://aaron1145563.github.io/${repo}/`}:{repo:null,url:null};
+}
 async function convertOrder(id){
   const o=orders.find(x=>x.id===id);
   if(!o)return;
-  await sb.from('clients').insert({name:o.name,business:o.business,phone:o.phone,plan:o.plan,pin:'1234',start_date:new Date().toISOString().slice(0,10),notes:o.notes||'',status:'activo'});
+  const tpl=assignTemplate(o.type);
+  await sb.from('clients').insert({name:o.name,business:o.business,phone:o.phone,plan:o.plan,pin:'1234',start_date:new Date().toISOString().slice(0,10),notes:o.notes||'',status:'activo',business_type:o.type||null,template_repo:tpl.repo,site_url:tpl.url,site_status:'pendiente'});
   await sb.from('orders').update({status:'convertido'}).eq('id',id);
-  await sb.from('activity_log').insert({action:'order_converted',entity:'orders',entity_id:id,details:{name:o.name}});
+  await sb.from('activity_log').insert({action:'order_converted',entity:'orders',entity_id:id,details:{name:o.name,template:tpl.repo}});
   await loadData();render();
 }
 async function markOrder(id,s){
@@ -380,15 +394,24 @@ function renderClients(list){
   const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
   const prices={basico:'$350',profesional:'$600',premium:'$950'};
   const b=document.getElementById('clientsBody');
-  if(!list.length){b.innerHTML='<tr><td colspan="9" class="empty">Sin clientes</td></tr>';return;}
-  b.innerHTML=list.map(c=>`<tr>
+  if(!list.length){b.innerHTML='<tr><td colspan="10" class="empty">Sin clientes</td></tr>';return;}
+  b.innerHTML=list.map(c=>{
+    const site=c.site_url?`<a href="${c.site_url}" target="_blank" style="color:var(--brand)">${c.template_repo}</a><br><span class="badge ${c.site_status==='publicado'?'convertido':'nuevo'}" style="font-size:10px">${c.site_status||'pendiente'}</span>`:'<span style="color:#999">Sin template</span>';
+    return `<tr>
     <td><b>${c.name}</b></td><td>${c.business}</td><td>${c.phone||'—'}</td><td><code>${c.pin||'1234'}</code></td>
     <td>${plans[c.plan]||c.plan}</td><td>${prices[c.plan]||'—'}</td>
+    <td>${site}</td>
     <td><span class="badge ${c.status}">${c.status}</span></td><td>${c.start_date||'—'}</td>
     <td><div class="row-acts">
       ${c.phone?`<button class="row-btn wa" title="WhatsApp" onclick="openWA('${c.phone}')">${svgWA}</button>`:''}
+      ${c.site_url&&c.site_status!=='publicado'?`<button class="row-btn ok" title="Marcar como publicado" onclick="markSitePublished('${c.id}')">${svgOk}</button>`:''}
       <button class="row-btn del" title="Eliminar" onclick="delClient('${c.id}')">${svgDel}</button>
-    </div></td></tr>`).join('');
+    </div></td></tr>`;
+  }).join("");
+}
+async function markSitePublished(id){
+  await sb.from('clients').update({site_status:'publicado'}).eq('id',id);
+  await loadData();render();
 }
 
 function renderPayments(list){
