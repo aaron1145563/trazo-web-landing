@@ -168,7 +168,7 @@ tr:hover td{background:#fafaf8}
         <div class="field"><label>WhatsApp</label><input type="tel" id="fPhone" placeholder="5512345678"/></div>
         <div class="field"><label>PIN del cliente</label><input type="text" id="fPin" placeholder="1234" maxlength="6"/></div>
         <div class="field"><label>Paquete</label>
-          <select id="fPlan"><option value="basico">Básico — $350/mes</option><option value="profesional">Profesional — $600/mes</option><option value="premium">Premium — $950/mes</option></select>
+          <select id="fPlan"><option value="basico">Básico — $500/mes</option><option value="profesional">Premium — $650/mes</option><option value="premium">Profesional — $950/mes</option></select>
         </div>
         <div class="field"><label>Setup cobrado</label><input type="number" id="fSetup" placeholder="800"/></div>
         <div class="field"><label>Fecha inicio</label><input type="date" id="fDate"/></div>
@@ -341,7 +341,7 @@ function renderStats(){
 }
 
 function renderOrders(list){
-  const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
+  const plans={basico:'Básico',profesional:'Premium',premium:'Profesional'};
   const b=document.getElementById('ordersBody');
   if(!list.length){b.innerHTML='<tr><td colspan="8" class="empty">Sin pedidos</td></tr>';return;}
   b.innerHTML=list.map(o=>`<tr>
@@ -375,7 +375,13 @@ async function convertOrder(id){
   const o=orders.find(x=>x.id===id);
   if(!o)return;
   const tpl=assignTemplate(o.type);
-  await sb.from('clients').insert({name:o.name,business:o.business,phone:o.phone,plan:o.plan,pin:'1234',start_date:new Date().toISOString().slice(0,10),notes:o.notes||'',status:'activo',business_type:o.type||null,template_repo:tpl.repo,site_url:tpl.url,site_status:'pendiente'});
+  const {data:inserted}=await sb.from('clients').insert({name:o.name,business:o.business,phone:o.phone,plan:o.plan,pin:'1234',start_date:new Date().toISOString().slice(0,10),notes:o.notes||'',status:'activo',business_type:o.type||null,template_repo:tpl.repo,site_url:tpl.url,site_status:'pendiente'}).select();
+  const newClient=inserted&&inserted[0];
+  if(newClient&&tpl.url){
+    const siteUrl=tpl.url+'?c='+newClient.id;
+    await sb.from('clients').update({site_url:siteUrl}).eq('id',newClient.id);
+    await sb.from('site_content').insert({client_id:newClient.id,business_type:o.type||null,content:{business_name:o.business||o.name,whatsapp:o.phone||''}});
+  }
   await sb.from('orders').update({status:'convertido'}).eq('id',id);
   await sb.from('activity_log').insert({action:'order_converted',entity:'orders',entity_id:id,details:{name:o.name,template:tpl.repo}});
   await loadData();render();
@@ -391,7 +397,7 @@ async function delOrder(id){
 }
 
 function renderClients(list){
-  const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
+  const plans={basico:'Básico',profesional:'Premium',premium:'Profesional'};
   const prices={basico:'$350',profesional:'$600',premium:'$950'};
   const b=document.getElementById('clientsBody');
   if(!list.length){b.innerHTML='<tr><td colspan="10" class="empty">Sin clientes</td></tr>';return;}

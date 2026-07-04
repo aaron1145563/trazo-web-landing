@@ -125,6 +125,22 @@ a{text-decoration:none;color:inherit}
 /* EMPTY */
 .empty{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:60px 20px;text-align:center;color:var(--subtle);font-size:14px}
 
+/* SITE EDITOR */
+.edit-field{margin-bottom:18px}
+.edit-field label{font-size:11px;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px}
+.edit-field input,.edit-field textarea{width:100%;background:var(--bg);border:1.5px solid var(--line2);border-radius:10px;padding:11px 14px;font-size:14px;color:#fff;outline:none;font-family:inherit;transition:border .2s;resize:vertical}
+.edit-field input:focus,.edit-field textarea:focus{border-color:var(--brand)}
+.edit-row{display:grid;grid-template-columns:1fr 1fr 28px;gap:8px;margin-bottom:8px}
+.edit-row-item{grid-template-columns:52px 1fr 1.4fr 70px 28px}
+.edit-row input{background:var(--bg);border:1.5px solid var(--line2);border-radius:8px;padding:9px 10px;font-size:13px;color:#fff;outline:none;font-family:inherit}
+.edit-row input:focus{border-color:var(--brand)}
+.edit-row .w-emoji{text-align:center}
+.edit-row-del{background:rgba(239,68,68,.12);color:var(--red);border-radius:8px;font-size:16px;font-weight:700;line-height:1}
+.edit-row-del:hover{background:rgba(239,68,68,.22)}
+.edit-add{background:rgba(59,130,246,.1);color:var(--brand-l);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;margin-top:4px}
+.edit-add:hover{background:rgba(59,130,246,.18)}
+@media(max-width:600px){.edit-row-item{grid-template-columns:1fr 28px;grid-template-areas:"icon del" "name name" "desc desc" "price price"}.edit-row-item input:nth-child(1){grid-area:icon}.edit-row-item input:nth-child(2){grid-area:name}.edit-row-item input:nth-child(3){grid-area:desc}.edit-row-item input:nth-child(4){grid-area:price}.edit-row-item .edit-row-del{grid-area:del}}
+
 /* SUPPORT BTN */
 .support-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);border-radius:var(--r);color:var(--wa);font-weight:700;font-size:14px;margin-top:32px;transition:all .2s}
 .support-btn:hover{background:rgba(37,211,102,.15)}
@@ -208,7 +224,7 @@ a{text-decoration:none;color:inherit}
 const SUPABASE_URL='https://rqjsvehqdbgfzjsoqeto.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxanN2ZWhxZGJnZnpqc29xZXRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNzkzMDMsImV4cCI6MjA5Nzc1NTMwM30.C4S3QuCCo3-X2SSscBBbkL2Y0b9NjlyWE2ErbhZdrRg';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentClient=null,myPayments=[],myOrders=[],myVisits=0;
+let currentClient=null,myPayments=[],myOrders=[],myVisits=0,mySiteContent={};
 
 async function clientLogin(){
   const phone=document.getElementById('loginPhone').value.trim().replace(/\D/g,'');
@@ -258,14 +274,18 @@ async function loadClientData(){
   const c=currentClient;
   const now=new Date();
   const monthStart=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
-  const [pay,ord,vis]=await Promise.all([
+  const [pay,ord,vis,sc]=await Promise.all([
     sb.from('payments').select('*').eq('client_id',c.id).order('created_at',{ascending:false}),
     sb.from('orders').select('*').eq('phone',c.phone).order('created_at',{ascending:false}),
-    sb.from('visits').select('*',{count:'exact',head:true}).eq('client_id',c.id).gte('created_at',monthStart)
+    sb.from('visits').select('*',{count:'exact',head:true}).eq('client_id',c.id).gte('created_at',monthStart),
+    sb.from('site_content').select('content').eq('client_id',c.id).maybeSingle()
   ]);
   myPayments=pay.data||[];
   myOrders=(ord.data||[]).filter(o=>o.status!=='rechazado');
   myVisits=vis.count||0;
+  mySiteContent=(sc.data&&sc.data.content)||{business_name:c.business||c.name,whatsapp:(c.phone||'').replace(/\D/g,'')};
+  if(!Array.isArray(mySiteContent.hours))mySiteContent.hours=[];
+  if(!Array.isArray(mySiteContent.items))mySiteContent.items=[];
 }
 
 const allTabs=['pedidos','clientes','pagos'];
@@ -293,7 +313,7 @@ function render(){
 function renderOrders(){
   const q=(document.getElementById('searchOrders').value||'').toLowerCase();
   const st=document.getElementById('filterStatus').value;
-  const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
+  const plans={basico:'Básico',profesional:'Premium',premium:'Profesional'};
   let list=myOrders;
   if(q)list=list.filter(o=>(o.name||'').toLowerCase().includes(q)||(o.code||'').includes(q)||(o.business||'').toLowerCase().includes(q));
   if(st)list=list.filter(o=>o.status===st);
@@ -340,8 +360,8 @@ async function changeStatus(id,status){
 
 function renderClientInfo(){
   const c=currentClient;
-  const plans={basico:'Básico',profesional:'Profesional',premium:'Premium'};
-  const prices={basico:'$350',profesional:'$600',premium:'$950'};
+  const plans={basico:'Básico',premium:'Premium',profesional:'Profesional'};
+  const prices={basico:'$500',premium:'$650',profesional:'$950'};
   document.getElementById('tab-clientes').innerHTML=`
     <div class="info-card fade-in">
       <h3>Informaci&oacute;n de tu sitio</h3>
@@ -355,9 +375,83 @@ function renderClientInfo(){
         <b>Activo desde</b><span>${c.start_date?fmtDate(c.start_date):'—'}</span>
         <b>Incluye</b><span>Hosting, SSL, mantenimiento y soporte</span>
         <b>Respaldos</b><span>Autom&aacute;ticos — tu sitio siempre seguro</span>
+        ${c.site_url?`<b>Tu sitio</b><span><a href="${c.site_url}" target="_blank" style="color:var(--brand-l)">${c.site_url}</a></span>`:''}
       </div>
     </div>
+    <div id="siteEditor"></div>
   `;
+  renderSiteEditor();
+}
+
+function renderSiteEditor(){
+  const d=mySiteContent;
+  const hoursHtml=(d.hours||[]).map((h,i)=>`
+    <div class="edit-row" data-idx="${i}">
+      <input placeholder="Ej. Lunes a Viernes" value="${(h.label||'').replace(/"/g,'&quot;')}" oninput="mySiteContent.hours[${i}].label=this.value"/>
+      <input placeholder="Ej. 9:00 am - 7:00 pm" value="${(h.value||'').replace(/"/g,'&quot;')}" oninput="mySiteContent.hours[${i}].value=this.value"/>
+      <button type="button" class="edit-row-del" onclick="removeHourRow(${i})">&times;</button>
+    </div>`).join('');
+  const itemsHtml=(d.items||[]).map((it,i)=>`
+    <div class="edit-row edit-row-item" data-idx="${i}">
+      <input class="w-emoji" placeholder="🍽" value="${(it.icon||'').replace(/"/g,'&quot;')}" oninput="mySiteContent.items[${i}].icon=this.value"/>
+      <input placeholder="Nombre" value="${(it.name||'').replace(/"/g,'&quot;')}" oninput="mySiteContent.items[${i}].name=this.value"/>
+      <input placeholder="Descripción" value="${(it.desc||'').replace(/"/g,'&quot;')}" oninput="mySiteContent.items[${i}].desc=this.value"/>
+      <input class="w-price" placeholder="$99" value="${(it.price||'').replace(/"/g,'&quot;')}" oninput="mySiteContent.items[${i}].price=this.value"/>
+      <button type="button" class="edit-row-del" onclick="removeItemRow(${i})">&times;</button>
+    </div>`).join('');
+
+  document.getElementById('siteEditor').innerHTML=`
+    <div class="info-card fade-in">
+      <h3>Editar el contenido de tu sitio</h3>
+      <p style="font-size:12px;color:var(--subtle);margin:-12px 0 20px">Cambia lo que quieras y da clic en Guardar. Se actualiza directo en tu sitio.</p>
+
+      <div class="edit-field"><label>Nombre del negocio</label><input id="fBizName" value="${(d.business_name||'').replace(/"/g,'&quot;')}"/></div>
+      <div class="edit-field"><label>Título principal (puedes usar &lt;span&gt;palabra&lt;/span&gt; para resaltar una palabra)</label><textarea id="fHeroTitle" rows="2">${d.hero_title_html||''}</textarea></div>
+      <div class="edit-field"><label>Subtítulo</label><textarea id="fHeroSub" rows="2">${d.hero_subtitle||''}</textarea></div>
+      <div class="edit-field"><label>WhatsApp (con código de país, ej. 5215512345678)</label><input id="fWhats" value="${(d.whatsapp||'').replace(/"/g,'&quot;')}"/></div>
+      <div class="edit-field"><label>Dirección</label><input id="fAddress" value="${(d.address||'').replace(/"/g,'&quot;')}"/></div>
+      <div class="edit-field"><label>Teléfono a mostrar</label><input id="fPhoneDisplay" value="${(d.phone_display||'').replace(/"/g,'&quot;')}"/></div>
+      <div class="edit-field"><label>Correo (opcional)</label><input id="fEmail" value="${(d.email||'').replace(/"/g,'&quot;')}"/></div>
+
+      <div class="edit-field">
+        <label>Horario</label>
+        <div id="hoursRows">${hoursHtml}</div>
+        <button type="button" class="edit-add" onclick="addHourRow()">+ Agregar horario</button>
+      </div>
+
+      <div class="edit-field">
+        <label>Servicios / productos / menú</label>
+        <div id="itemsRows">${itemsHtml}</div>
+        <button type="button" class="edit-add" onclick="addItemRow()">+ Agregar</button>
+      </div>
+
+      <button class="gate-go" style="margin-top:12px" onclick="saveSiteContent()" id="btnSaveSite">Guardar cambios</button>
+      <div id="saveMsg" style="font-size:12px;color:var(--green);margin-top:10px;display:none">Guardado ✓</div>
+    </div>
+  `;
+}
+
+function addHourRow(){mySiteContent.hours.push({label:'',value:''});renderSiteEditor();}
+function removeHourRow(i){mySiteContent.hours.splice(i,1);renderSiteEditor();}
+function addItemRow(){mySiteContent.items.push({icon:'',name:'',desc:'',price:''});renderSiteEditor();}
+function removeItemRow(i){mySiteContent.items.splice(i,1);renderSiteEditor();}
+
+async function saveSiteContent(){
+  const d=mySiteContent;
+  d.business_name=document.getElementById('fBizName').value;
+  d.hero_title_html=document.getElementById('fHeroTitle').value;
+  d.hero_subtitle=document.getElementById('fHeroSub').value;
+  d.whatsapp=document.getElementById('fWhats').value.replace(/\D/g,'');
+  d.address=document.getElementById('fAddress').value;
+  d.phone_display=document.getElementById('fPhoneDisplay').value;
+  d.email=document.getElementById('fEmail').value;
+  const btn=document.getElementById('btnSaveSite');
+  btn.textContent='Guardando...';btn.disabled=true;
+  await sb.from('site_content').upsert({client_id:currentClient.id,business_type:currentClient.business_type||null,content:d},{onConflict:'client_id'});
+  btn.textContent='Guardar cambios';btn.disabled=false;
+  const msg=document.getElementById('saveMsg');
+  msg.style.display='block';
+  setTimeout(()=>msg.style.display='none',2500);
 }
 
 function renderPayments(){
