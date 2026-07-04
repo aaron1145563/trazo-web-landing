@@ -264,7 +264,7 @@ async function loadClientData(){
     sb.from('visits').select('*',{count:'exact',head:true}).eq('client_id',c.id).gte('created_at',monthStart)
   ]);
   myPayments=pay.data||[];
-  myOrders=ord.data||[];
+  myOrders=(ord.data||[]).filter(o=>o.status!=='rechazado');
   myVisits=vis.count||0;
 }
 
